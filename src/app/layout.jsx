@@ -10,7 +10,7 @@ import '@/styles/global.css'
 
 export const metadata = {
   title: {
-    template: '%s - Axelarscan',
+    template: '%s - Scalarscan',
     default: process.env.NEXT_PUBLIC_DEFAULT_TITLE,
   },
   description: process.env.NEXT_PUBLIC_DEFAULT_DESCRIPTION,
@@ -36,14 +36,18 @@ export default function RootLayout({ children }) {
     <html
       lang="en"
       className={clsx(
-        'h-full scroll-smooth bg-white dark:bg-zinc-900 antialiased',
+        'h-full scroll-smooth bg-white antialiased dark:bg-zinc-900',
         inter.variable,
         lexend.variable,
       )}
     >
       {process.env.NEXT_PUBLIC_GA_TRACKING_ID && (
         <>
-          <Script async id="gtag" src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_TRACKING_ID}`} />
+          <Script
+            async
+            id="gtag"
+            src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GA_TRACKING_ID}`}
+          />
           <Script
             id="gtag"
             dangerouslySetInnerHTML={{
@@ -59,7 +63,7 @@ export default function RootLayout({ children }) {
           />
         </>
       )}
-      <body className="flex min-h-full bg-white dark:bg-zinc-900 antialiased">
+      <body className="flex min-h-full bg-white antialiased dark:bg-zinc-900">
         <Providers>
           <div className="w-full">
             <Layout>{children}</Layout>

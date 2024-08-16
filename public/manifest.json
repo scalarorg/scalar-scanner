@@ -1,6 +1,6 @@
 {
-  "short_name": "Axelarscan",
-  "name": "Axelarscan | Axelar Network Explorer",
+  "short_name": "Scalarscan",
+  "name": "Scalarscan | Scalar Network Explorer",
   "start_url": ".",
   "display": "standalone",
   "theme_color": "#050707",
