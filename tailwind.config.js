@@ -23,6 +23,14 @@ module.exports = {
       '9xl': ['8rem', { lineHeight: '1' }],
     },
     extend: {
+      colors: {
+        scalar: {
+          blue: '#193BB6',
+          black: '#222222',
+          divide: '#DDDDDD',
+          'light-blue': '#3962F1',
+        },
+      },
       borderRadius: {
         '4xl': '2rem',
       },
@@ -31,17 +39,17 @@ module.exports = {
         display: 'var(--font-lexend)',
       },
       height: {
-        '112': '28rem',
-        '144': '36rem',
+        112: '28rem',
+        144: '36rem',
       },
       width: {
-        'tvl': '7301px',
+        tvl: '7301px',
       },
       minWidth: {
-        'md': '28rem',
+        md: '28rem',
       },
       maxWidth: {
-        '88': '22rem',
+        88: '22rem',
         '2xl': '40rem',
       },
     },

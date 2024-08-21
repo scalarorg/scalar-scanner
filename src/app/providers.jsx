@@ -59,13 +59,16 @@ export function Providers({ children }) {
   }, [pathname, searchParams])
 
   return (
-    <ThemeProvider attribute="class" disableTransitionOnChange>
-      <ThemeWatcher />
+    // TODO_SCALAR: Update the dark theme
+    <ThemeProvider
+      attribute="class"
+      disableTransitionOnChange
+      defaultTheme="light"
+    >
+      {/* <ThemeWatcher /> */}
       <Global />
       <QueryClientProvider client={client}>
-        <WagmiConfigProvider>
-          {children}
-        </WagmiConfigProvider>
+        <WagmiConfigProvider>{children}</WagmiConfigProvider>
       </QueryClientProvider>
     </ThemeProvider>
   )

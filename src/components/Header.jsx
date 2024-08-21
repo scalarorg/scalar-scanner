@@ -9,7 +9,7 @@ import _ from 'lodash'
 import { FiChevronDown } from 'react-icons/fi'
 
 import { Container } from '@/components/Container'
-import { Logo } from '@/components/Logo'
+import { ScalarLogo } from '@/components/ScalarLogo'
 import { NavLink } from '@/components/NavLink'
 import { Search } from '@/components/Search'
 import { ThemeToggle } from '@/components/ThemeToggle'
@@ -21,35 +21,36 @@ import { toArray } from '@/lib/parser'
 import { isNumber, toNumber } from '@/lib/number'
 
 const navigations = [
-  {
-    title: 'Interchain',
-    children: [
-      { title: 'Statistics', href: '/interchain' },
-      { title: 'General Message Passing', href: '/gmp/search' },
-      { title: 'Token Transfers', href: '/transfers/search' },
-    ],
-  },
-  {
-    title: 'Network',
-    children: toArray([
-      { title: 'Validators', href: '/validators' },
-      ['devnet-amplifier', 'devnet-verifiers'].includes(ENVIRONMENT) && { title: 'Verifiers', href: '/verifiers' },
-      { title: 'Blocks', href: '/blocks' },
-      { title: 'Transactions', href: '/transactions' },
-      { title: 'EVM Polls', href: '/evm-polls' },
-      ['devnet-amplifier', 'devnet-verifiers'].includes(ENVIRONMENT) && { title: 'VM Polls', href: '/vm-polls' },
-      { title: 'EVM Batches', href: '/evm-batches' },
-      { title: 'Proposals', href: '/proposals' },
-    ]),
-  },
-  ENVIRONMENT === 'mainnet' && { title: 'TVL', href: '/tvl' },
-  {
-    title: 'Resources',
-    children: [
-      { title: 'Chains', href: '/resources/chains' },
-      { title: 'Assets', href: '/resources/assets' },
-    ],
-  },
+  // { title: 'General Message Passing', href: '/gmp/search' },
+  // {
+  //   title: 'Interchain',
+  //   children: [
+  //     { title: 'Statistics', href: '/interchain' },
+  //     { title: 'General Message Passing', href: '/gmp/search' },
+  //     { title: 'Token Transfers', href: '/transfers/search' },
+  //   ],
+  // },
+  // {
+  //   title: 'Network',
+  //   children: toArray([
+  //     { title: 'Validators', href: '/validators' },
+  //     ['devnet-amplifier', 'devnet-verifiers'].includes(ENVIRONMENT) && { title: 'Verifiers', href: '/verifiers' },
+  //     { title: 'Blocks', href: '/blocks' },
+  //     { title: 'Transactions', href: '/transactions' },
+  //     { title: 'EVM Polls', href: '/evm-polls' },
+  //     ['devnet-amplifier', 'devnet-verifiers'].includes(ENVIRONMENT) && { title: 'VM Polls', href: '/vm-polls' },
+  //     { title: 'EVM Batches', href: '/evm-batches' },
+  //     { title: 'Proposals', href: '/proposals' },
+  //   ]),
+  // },
+  // ENVIRONMENT === 'mainnet' && { title: 'TVL', href: '/tvl' },
+  // {
+  //   title: 'Resources',
+  //   children: [
+  //     { title: 'Chains', href: '/resources/chains' },
+  //     { title: 'Assets', href: '/resources/assets' },
+  //   ],
+  // },
 ]
 
 const environments = [
@@ -58,7 +59,11 @@ const environments = [
   { name: 'stagenet', href: 'https://stagenet.axelarscan.io' },
   { name: 'devnet-amplifier', href: 'https://devnet-amplifier.axelarscan.io' },
   { name: 'devnet-verifiers', href: 'https://devnet-verifiers.axelarscan.io' },
-].filter(d => !['stagenet', 'devnet-amplifier', 'devnet-verifiers'].includes(d.name) || d.name === ENVIRONMENT)
+].filter(
+  (d) =>
+    !['stagenet', 'devnet-amplifier', 'devnet-verifiers'].includes(d.name) ||
+    d.name === ENVIRONMENT,
+)
 
 function MobileNavLink({ href, children, className }) {
   const pathname = usePathname()
@@ -69,7 +74,9 @@ function MobileNavLink({ href, children, className }) {
       href={href}
       className={clsx(
         'block w-full px-2 py-1',
-        href === pathname ? 'text-blue-600 dark:text-blue-500' : 'text-zinc-700 dark:text-zinc-300',
+        href === pathname
+          ? 'text-blue-600 dark:text-blue-500'
+          : 'text-zinc-700 dark:text-zinc-300',
         className,
       )}
     >
@@ -137,7 +144,7 @@ function MobileNavigation() {
         >
           <Popover.Panel
             as="div"
-            className="absolute inset-x-0 top-full mt-4 flex origin-top flex-col rounded-2xl bg-white dark:bg-zinc-800 p-4 text-lg tracking-tight text-zinc-900 dark:text-zinc-100 shadow-xl ring-1 ring-zinc-900/5"
+            className="absolute inset-x-0 top-full mt-4 flex origin-top flex-col rounded-2xl bg-white p-4 text-lg tracking-tight text-zinc-900 shadow-xl ring-1 ring-zinc-900/5 dark:bg-zinc-800 dark:text-zinc-100"
           >
             {/*<div className="md:hidden">
               <Search />
@@ -148,13 +155,23 @@ function MobileNavigation() {
               if (children) {
                 return (
                   <div key={i} className="flex flex-col">
-                    <span className="px-2 pt-4 pb-1 font-bold">{title}</span>
-                    {children.map((c, j) => <MobileNavLink key={j} href={c.href}>{c.title}</MobileNavLink>)}
+                    <span className="px-2 pb-1 pt-4 font-bold">{title}</span>
+                    {children.map((c, j) => (
+                      <MobileNavLink key={j} href={c.href}>
+                        {c.title}
+                      </MobileNavLink>
+                    ))}
                   </div>
                 )
               }
 
-              return href && (<MobileNavLink key={i} href={href} className="font-bold pt-4">{title}</MobileNavLink>)
+              return (
+                href && (
+                  <MobileNavLink key={i} href={href} className="pt-4 font-bold">
+                    {title}
+                  </MobileNavLink>
+                )
+              )
             })}
           </Popover.Panel>
         </Transition.Child>
@@ -168,8 +185,10 @@ function EnvirontmentLink({ name, href, children }) {
     <Link
       href={href}
       className={clsx(
-        'w-full inline-block rounded-lg p-2 capitalize text-sm hover:text-blue-600 dark:hover:text-blue-500 whitespace-nowrap',
-        name === ENVIRONMENT ? 'text-blue-600 dark:text-blue-500' : 'text-zinc-700 dark:text-zinc-300',
+        'inline-block w-full whitespace-nowrap rounded-lg p-2 text-sm capitalize hover:text-blue-600 dark:hover:text-blue-500',
+        name === ENVIRONMENT
+          ? 'text-blue-600 dark:text-blue-500'
+          : 'text-zinc-700 dark:text-zinc-300',
       )}
     >
       {children}
@@ -185,26 +204,49 @@ export function Header() {
   const { assets, itsAssets, tvl } = useGlobalStore()
 
   useEffect(() => {
-    if (assets && itsAssets && tvl?.data && tvl.data.length > (assets.length + itsAssets.length) / 2) {
-      setData(tvl.data.map(d => {
-        const { asset, assetType, total } = { ...d }
-        let { price } = { ...d }
+    if (
+      assets &&
+      itsAssets &&
+      tvl?.data &&
+      tvl.data.length > (assets.length + itsAssets.length) / 2
+    ) {
+      setData(
+        tvl.data.map((d) => {
+          const { asset, assetType, total } = { ...d }
+          let { price } = { ...d }
 
-        const assetData = assetType === 'its' ? getITSAssetData(asset, itsAssets) : getAssetData(asset, assets)
-        price = toNumber(isNumber(price) ? price : isNumber(assetData?.price) ? assetData.price : -1)
+          const assetData =
+            assetType === 'its'
+              ? getITSAssetData(asset, itsAssets)
+              : getAssetData(asset, assets)
+          price = toNumber(
+            isNumber(price)
+              ? price
+              : isNumber(assetData?.price)
+                ? assetData.price
+                : -1,
+          )
 
-        return { ...d, value: toNumber(total) * price }
-      }))
+          return { ...d, value: toNumber(total) * price }
+        }),
+      )
     }
   }, [assets, itsAssets, tvl, setData])
 
   return (
-    <header className={clsx('bg-white dark:bg-zinc-900 py-6', ['/tvl'].includes(pathname) && !!tvl && 'lg:w-tvl')}>
-      <Container className={['/tvl'].includes(pathname) && !!tvl && clsx('lg:!mx-24')}>
+    <header
+      className={clsx(
+        'bg-white py-6 dark:bg-zinc-900',
+        ['/tvl'].includes(pathname) && !!tvl && 'lg:w-tvl',
+      )}
+    >
+      <Container
+        className={['/tvl'].includes(pathname) && !!tvl && clsx('lg:!mx-24')}
+      >
         <nav className="relative z-50 flex justify-between gap-x-4">
           <div className="flex items-center xl:gap-x-12">
             <Link href="/" aria-label="Dashboard">
-              <Logo className="h-10 w-auto" />
+              <ScalarLogo className="h-10 w-auto" />
             </Link>
             <div className="hidden xl:flex xl:gap-x-4">
               {navigations.map((d, i) => {
@@ -220,11 +262,17 @@ export function Header() {
                     >
                       <Popover.Button
                         className={clsx(
-                          'rounded-lg focus:outline-none uppercase text-sm whitespace-nowrap',
-                          href === pathname || children.find(c => c.href === pathname) ? 'text-blue-600 dark:text-blue-500' : 'text-zinc-700 dark:text-zinc-300',
+                          'whitespace-nowrap rounded-lg text-sm uppercase focus:outline-none',
+                          href === pathname ||
+                            children.find((c) => c.href === pathname)
+                            ? 'text-blue-600 dark:text-blue-500'
+                            : 'text-zinc-700 dark:text-zinc-300',
                         )}
                       >
-                        <Link href={children[0].href} className="p-2 inline-flex items-center gap-x-1">
+                        <Link
+                          href={children[0].href}
+                          className="inline-flex items-center gap-x-1 p-2"
+                        >
                           <span>{title}</span>
                           <FiChevronDown className="h-4 w-4" />
                         </Link>
@@ -241,8 +289,12 @@ export function Header() {
                         leaveTo="opacity-0 translate-y-1"
                       >
                         <Popover.Panel className="absolute left-1/2 z-10 flex w-screen max-w-min -translate-x-1/2">
-                          <div className="shrink rounded-xl bg-white dark:bg-zinc-800 p-2 text-sm shadow-lg ring-1 ring-zinc-900/5">
-                            {children.map((c, j) => <NavLink key={j} href={c.href}>{c.title}</NavLink>)}
+                          <div className="shrink rounded-xl bg-white p-2 text-sm shadow-lg ring-1 ring-zinc-900/5 dark:bg-zinc-800">
+                            {children.map((c, j) => (
+                              <NavLink key={j} href={c.href}>
+                                {c.title}
+                              </NavLink>
+                            ))}
                           </div>
                         </Popover.Panel>
                       </Transition>
@@ -250,11 +302,12 @@ export function Header() {
                   )
                 }
 
-                return href && (
-                  <NavLink key={i} href={href}>
-                    <div className="flex items-center">
-                      {title}
-                      {/*title === 'TVL' && !!data && (
+                return (
+                  href && (
+                    <NavLink key={i} href={href}>
+                      <div className="flex items-center">
+                        {title}
+                        {/*title === 'TVL' && !!data && (
                         <Tag className="w-fit bg-zinc-100 dark:bg-zinc-800 ml-2">
                           <Number
                             value={_.sumBy(data.filter(d => d.value > 0), 'value')}
@@ -265,14 +318,15 @@ export function Header() {
                           />
                         </Tag>
                       )*/}
-                    </div>
-                  </NavLink>
+                      </div>
+                    </NavLink>
+                  )
                 )
               })}
             </div>
           </div>
           <div className="flex items-center gap-x-4">
-            <div className={clsx('block'/*, 'hidden md:block'*/)}>
+            <div className={clsx('block' /*, 'hidden md:block'*/)}>
               <Search />
             </div>
             <div className="hidden xl:block">
@@ -281,7 +335,7 @@ export function Header() {
                 onMouseLeave={() => setPopoverEnvironmentOpen(false)}
                 className="relative"
               >
-                <Popover.Button className="p-2 rounded-lg focus:outline-none capitalize text-sm text-zinc-700 dark:text-zinc-300 whitespace-nowrap">
+                <Popover.Button className="whitespace-nowrap rounded-lg p-2 text-sm capitalize text-zinc-700 focus:outline-none dark:text-zinc-300">
                   <span>{ENVIRONMENT}</span>
                 </Popover.Button>
 
@@ -296,14 +350,18 @@ export function Header() {
                   leaveTo="opacity-0 translate-y-1"
                 >
                   <Popover.Panel className="absolute left-1/2 z-10 flex w-screen max-w-min -translate-x-1/2">
-                    <div className="shrink rounded-xl bg-white dark:bg-zinc-800 p-2 text-sm shadow-lg ring-1 ring-zinc-900/5">
-                      {environments.map((d, i) => <EnvirontmentLink key={i} {...d}>{d.name}</EnvirontmentLink>)}
+                    <div className="shrink rounded-xl bg-white p-2 text-sm shadow-lg ring-1 ring-zinc-900/5 dark:bg-zinc-800">
+                      {environments.map((d, i) => (
+                        <EnvirontmentLink key={i} {...d}>
+                          {d.name}
+                        </EnvirontmentLink>
+                      ))}
                     </div>
                   </Popover.Panel>
                 </Transition>
               </Popover>
             </div>
-            <ThemeToggle />
+            {/* <ThemeToggle /> */}
             <div className="-mr-1 xl:hidden">
               <MobileNavigation />
             </div>
