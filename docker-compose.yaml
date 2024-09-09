@@ -1,0 +1,11 @@
+services:
+  scalar-scanner-ui:
+    container_name: scalar-scanner-ui
+    build: 
+      context: ./
+      dockerfile: Dockerfile
+      args:
+        - ENV=dev
+    image: "scalar/scanner:latest"
+    ports:
+      - "3001:3000"

@@ -1,5 +1,6 @@
-FROM node:20.16.0-bookworm-slim AS builder
-ARG ENV=dev
+FROM node:20.16.0-bookworm-slim
+ARG ENV=prod
+RUN apt update && apt install -y python3 make gcc g++
 WORKDIR /app
 
 COPY package.json package-lock* ./
@@ -17,33 +18,6 @@ COPY prettier.config.js .
 COPY tailwind.config.js .
 
 RUN npm install
-RUN npm run build
-
-# Production stage
-FROM nginx:1.25.4-alpine AS production
-
-# Set label for image
-LABEL Name="scalar-xchains-scanner"
-
-# Create directories
-RUN mkdir /app
-WORKDIR /usr/share/nginx/html/config
-
-# Copy built files from build stage
-COPY --from=builder /app/dist /usr/share/nginx/html
-
-# Copy nginx configuration
-COPY --from=builder /app/nginx.conf /etc/nginx/nginx.conf
-
-# Expose port
-EXPOSE 8080
-
-# Install necessary packages
-RUN apk add --no-cache bash
-
-# # Set execute permission for env.sh
-# RUN chmod +x /usr/share/nginx/html/config/env.sh
-
-# Start Nginx server with environment setup
-CMD ["/bin/bash", "-c", "nginx -g \"daemon off;\""]
-# CMD ["/bin/bash", "-c", "/usr/share/nginx/html/config/env.sh && nginx -g \"daemon off;\""]
+RUN npm run build-$ENV
+EXPOSE 3000
+ENTRYPOINT [ "npm", "run", "start" ]
