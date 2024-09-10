@@ -8,7 +8,7 @@ COPY package.json package-lock* ./
 
 COPY public ./public
 COPY src ./src
-COPY .env* .
+COPY .env .
 COPY .eslintrc.json .
 COPY jsconfig.json .
 COPY next.config.js .
@@ -16,8 +16,16 @@ COPY nginx.conf .
 COPY postcss.config.js .
 COPY prettier.config.js .
 COPY tailwind.config.js .
+COPY docker-entrypoint.sh .
 
+# RUN npm run build-$ENV
 RUN npm install
-RUN npm run build-$ENV
+RUN npm run build 
+
 EXPOSE 3000
-ENTRYPOINT [ "npm", "run", "start" ]
+
+ENTRYPOINT ["/app/docker-entrypoint.sh"]
+
+CMD ["npm", "run", "dev"]
+
+STOPSIGNAL SIGTERM

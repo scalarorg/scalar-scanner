@@ -7,6 +7,7 @@ import { Layout } from '@/components/Layout'
 
 import '@/styles/tailwind.css'
 import '@/styles/global.css'
+import { Suspense } from 'react'
 
 export const metadata = {
   title: {
@@ -64,11 +65,13 @@ export default function RootLayout({ children }) {
         </>
       )}
       <body className="flex min-h-full bg-white antialiased dark:bg-zinc-900">
-        <Providers>
-          <div className="w-full">
-            <Layout>{children}</Layout>
-          </div>
-        </Providers>
+        <Suspense>
+          <Providers>
+            <div className="w-full">
+              <Layout>{children}</Layout>
+            </div>
+          </Providers>
+        </Suspense>
       </body>
     </html>
   )

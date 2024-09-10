@@ -24,7 +24,10 @@ const chainTypes = toArray([
   { label: 'All', value: undefined },
   { label: 'EVM', value: 'evm' },
   { label: 'Cosmos', value: 'cosmos' },
-  ['devnet-amplifier', 'devnet-verifiers'].includes(ENVIRONMENT) && { label: 'VM', value: 'vm' },
+  ['devnet-amplifier', 'devnet-verifiers'].includes(ENVIRONMENT) && {
+    label: 'VM',
+    value: 'vm',
+  },
 ])
 
 const assetTypes = [
@@ -35,18 +38,37 @@ const assetTypes = [
 
 function Chain({ data }) {
   const { contracts } = useGlobalStore()
-  const { gateway_contracts, gas_service_contracts, interchain_token_service_contract } = { ...contracts }
+  const {
+    gateway_contracts,
+    gas_service_contracts,
+    interchain_token_service_contract,
+  } = { ...contracts }
 
-  const { id, chain_id, chain_name, deprecated, endpoints, name, image, explorer, prefix_address, chain_type } = { ...data }
+  const {
+    id,
+    chain_id,
+    chain_name,
+    deprecated,
+    endpoints,
+    name,
+    image,
+    explorer,
+    prefix_address,
+    chain_type,
+  } = { ...data }
   const { rpc, lcd } = { ...endpoints }
   const { url, address_path } = { ...explorer }
   const gatewayAddress = gateway_contracts?.[id]?.address
   const gasServiceAddress = gas_service_contracts?.[id]?.address
-  const itsAddress = chain_type === 'evm' && (id in { ...interchain_token_service_contract } ? interchain_token_service_contract[id] : _.head(interchain_token_service_contract?.addresses))
+  const itsAddress =
+    chain_type === 'evm' &&
+    (id in { ...interchain_token_service_contract }
+      ? interchain_token_service_contract[id]
+      : _.head(interchain_token_service_contract?.addresses))
 
   return (
     <li>
-      <div className="relative bg-zinc-50/75 dark:bg-zinc-800/25 p-6 rounded-2xl">
+      <div className="relative rounded-2xl bg-zinc-50/75 p-6 dark:bg-zinc-800/25">
         <div className="flex items-start justify-between">
           <div className="overflow-hidden">
             <Image
@@ -72,37 +94,54 @@ function Chain({ data }) {
                 </Tooltip>
               )}
               <Tooltip content={deprecated ? 'Deactivated' : 'Active'}>
-                <GoDotFill size={18} className={clsx(deprecated ? 'text-red-600' : 'text-green-600')} />
+                <GoDotFill
+                  size={18}
+                  className={clsx(
+                    deprecated ? 'text-red-600' : 'text-green-600',
+                  )}
+                />
               </Tooltip>
             </div>
             {chain_type && <Tag className="uppercase">{chain_type}</Tag>}
           </div>
         </div>
-        <div className="flex items-center justify-between mt-3">
+        <div className="mt-3 flex items-center justify-between">
           <span className="font-display text-xl font-medium">{name}</span>
-          {chain_id && <span className="text-zinc-400 dark:text-zinc-500 text-sm font-normal whitespace-nowrap mt-0.5">ID: {chain_id}</span>}
+          {chain_id && (
+            <span className="mt-0.5 whitespace-nowrap text-sm font-normal text-zinc-400 dark:text-zinc-500">
+              ID: {chain_id}
+            </span>
+          )}
         </div>
-        <div className="flex flex-col gap-y-4 mt-6 mb-1">
+        <div className="mb-1 mt-6 flex flex-col gap-y-4">
           {chain_name && <ValueBox title="Chain Name" value={chain_name} />}
           {gatewayAddress && (
             <ValueBox
               title="Gateway Address"
               value={gatewayAddress}
-              url={url && `${url}${address_path?.replace('{address}', gatewayAddress)}`}
+              url={
+                url &&
+                `${url}${address_path?.replace('{address}', gatewayAddress)}`
+              }
             />
           )}
           {gasServiceAddress && (
             <ValueBox
               title="Gas Service Address"
               value={gasServiceAddress}
-              url={url && `${url}${address_path?.replace('{address}', gasServiceAddress)}`}
+              url={
+                url &&
+                `${url}${address_path?.replace('{address}', gasServiceAddress)}`
+              }
             />
           )}
           {itsAddress && (
             <ValueBox
               title="ITS Address"
               value={itsAddress}
-              url={url && `${url}${address_path?.replace('{address}', itsAddress)}`}
+              url={
+                url && `${url}${address_path?.replace('{address}', itsAddress)}`
+              }
             />
           )}
           {toArray(rpc).length > 0 && (
@@ -121,7 +160,9 @@ function Chain({ data }) {
               noEllipse={true}
             />
           )}
-          {prefix_address && <ValueBox title="Address Prefix" value={prefix_address} />}
+          {prefix_address && (
+            <ValueBox title="Address Prefix" value={prefix_address} />
+          )}
         </div>
       </div>
     </li>
@@ -134,13 +175,33 @@ function Asset({ data, focusID, onFocus }) {
   const [chainSelected, setChainSelected] = useState(null)
   const { chains } = useGlobalStore()
 
-  const { type, denom, denoms, native_chain, name, symbol, decimals, image } = { ...data }
+  const { type, denom, denoms, native_chain, name, symbol, decimals, image } = {
+    ...data,
+  }
   let { addresses } = { ...data }
   const _id = type === 'its' ? data.id : denom
-  const { id, explorer, chain_type } = { ...(focusID === _id && getChainData(chainSelected, chains)) }
+  const { id, explorer, chain_type } = {
+    ...(focusID === _id && getChainData(chainSelected, chains)),
+  }
   const { url, contract_path, asset_path } = { ...explorer }
-  addresses = _.uniqBy(toArray(_.concat({ chain: native_chain, ...(type === 'its' ? data.chains?.[native_chain] : addresses?.[native_chain]) }, Object.entries({ ...(type === 'its' ? data.chains : addresses) }).map(([k, v]) => ({ chain: k, ...v })))), 'chain')/*.filter(d => getChainData(d.chain, chains))*/.map(d => ({ ...d, address: d.address || d.tokenAddress }))
-  const tokenData = addresses.find(d => d.chain === id)
+  addresses = _.uniqBy(
+    toArray(
+      _.concat(
+        {
+          chain: native_chain,
+          ...(type === 'its'
+            ? data.chains?.[native_chain]
+            : addresses?.[native_chain]),
+        },
+        Object.entries({ ...(type === 'its' ? data.chains : addresses) }).map(
+          ([k, v]) => ({ chain: k, ...v }),
+        ),
+      ),
+    ),
+    'chain',
+  ) /*.filter(d => getChainData(d.chain, chains))*/
+    .map((d) => ({ ...d, address: d.address || d.tokenAddress }))
+  const tokenData = addresses.find((d) => d.chain === id)
   const { address, ibc_denom } = { ...tokenData }
   const tokenSymbol = tokenData?.symbol || symbol
 
@@ -150,7 +211,7 @@ function Asset({ data, focusID, onFocus }) {
 
   return (
     <li>
-      <div className="relative bg-zinc-50/75 dark:bg-zinc-800/25 p-6 rounded-2xl">
+      <div className="relative rounded-2xl bg-zinc-50/75 p-6 dark:bg-zinc-800/25">
         <div className="flex items-start justify-between">
           <div className="overflow-hidden">
             <Image
@@ -168,9 +229,9 @@ function Asset({ data, focusID, onFocus }) {
               </Tooltip>
             )}
             <div className="flex flex-wrap items-center">
-              {toArray(_.concat(denom, _.head(denoms))).map(d => (
+              {toArray(_.concat(denom, _.head(denoms))).map((d) => (
                 <Tooltip key={d} content="Denom" className="whitespace-nowrap">
-                  <Tag className="bg-orange-400 dark:bg-orange-500 font-normal whitespace-nowrap ml-1 mt-1">
+                  <Tag className="ml-1 mt-1 whitespace-nowrap bg-orange-400 font-normal dark:bg-orange-500">
                     {ellipse(d)}
                   </Tag>
                 </Tooltip>
@@ -178,26 +239,41 @@ function Asset({ data, focusID, onFocus }) {
             </div>
           </div>
         </div>
-        <div className="flex items-center justify-between mt-3">
+        <div className="mt-3 flex items-center justify-between">
           <span className="font-display text-xl font-medium">{name}</span>
-          {decimals > 0 && <span className="text-zinc-400 dark:text-zinc-500 text-sm font-normal whitespace-nowrap mt-0.5">Decimals: {decimals}</span>}
+          {decimals > 0 && (
+            <span className="mt-0.5 whitespace-nowrap text-sm font-normal text-zinc-400 dark:text-zinc-500">
+              Decimals: {decimals}
+            </span>
+          )}
         </div>
-        <div className="flex flex-col gap-y-4 mt-6 mb-1">
+        <div className="mb-1 mt-6 flex flex-col gap-y-4">
           <div className="flex flex-col gap-y-1">
             <span className="text-base text-zinc-400 dark:text-zinc-500">
               {type === 'its' ? 'Interchain' : 'Gateway'} Tokens
             </span>
             <div className="flex flex-wrap items-center">
-              {_.slice(addresses, 0, focusID === _id && seeMore ? addresses.length : NUM_CHAINS_TRUNCATE).map((d, i) => {
+              {_.slice(
+                addresses,
+                0,
+                focusID === _id && seeMore
+                  ? addresses.length
+                  : NUM_CHAINS_TRUNCATE,
+              ).map((d, i) => {
                 const { chain, address, ibc_denom, symbol } = { ...d }
                 const { name, image } = { ...getChainData(chain, chains) }
 
                 return (
-                  <div key={i} className="mr-1.5 mb-1.5">
-                    <Tooltip content={`${name}${chain === native_chain ? ' (Native Chain)' : ''}`} className="whitespace-nowrap">
+                  <div key={i} className="mb-1.5 mr-1.5">
+                    <Tooltip
+                      content={`${name}${chain === native_chain ? ' (Native Chain)' : ''}`}
+                      className="whitespace-nowrap"
+                    >
                       <button
                         onClick={() => {
-                          setChainSelected(chain === chainSelected ? null : chain)
+                          setChainSelected(
+                            chain === chainSelected ? null : chain,
+                          )
                           if (onFocus) onFocus(_id)
                         }}
                       >
@@ -208,7 +284,11 @@ function Asset({ data, focusID, onFocus }) {
                           height={24}
                           className={clsx(
                             'rounded-full',
-                            focusID === _id && chain === chainSelected ? 'border-2 border-blue-600 dark:border-blue-500' : chain === native_chain ? 'border-2 border-orange-400 dark:border-orange-500' : '',
+                            focusID === _id && chain === chainSelected
+                              ? 'border-2 border-blue-600 dark:border-blue-500'
+                              : chain === native_chain
+                                ? 'border-2 border-orange-400 dark:border-orange-500'
+                                : '',
                           )}
                         />
                       </button>
@@ -222,9 +302,11 @@ function Asset({ data, focusID, onFocus }) {
                     setSeeMore(!seeMore)
                     if (onFocus) onFocus(_id)
                   }}
-                  className="bg-zinc-100 dark:bg-zinc-800 rounded text-blue-600 dark:text-blue-500 text-xs 3xl:text-sm font-medium mb-1.5 px-1.5 3xl:px-2.5 py-1 3xl:py-1.5"
+                  className="3xl:text-sm 3xl:px-2.5 3xl:py-1.5 mb-1.5 rounded bg-zinc-100 px-1.5 py-1 text-xs font-medium text-blue-600 dark:bg-zinc-800 dark:text-blue-500"
                 >
-                  {seeMore ? 'See Less' : `+${addresses.length - NUM_CHAINS_TRUNCATE} More`}
+                  {seeMore
+                    ? 'See Less'
+                    : `+${addresses.length - NUM_CHAINS_TRUNCATE} More`}
                 </button>
               )}
             </div>
@@ -233,20 +315,29 @@ function Asset({ data, focusID, onFocus }) {
             <div className="flex flex-col gap-y-3">
               <div className="flex items-center justify-between gap-x-2">
                 <Tag className="uppercase">{id}</Tag>
-                {chain_type === 'evm' && <AddMetamask chain={id} asset={_id} type={type} />}
+                {chain_type === 'evm' && (
+                  <AddMetamask chain={id} asset={_id} type={type} />
+                )}
               </div>
               {address && (
                 <ValueBox
                   title="Token Contract"
                   value={address}
-                  url={url && `${url}${contract_path?.replace('{address}', address)}`}
+                  url={
+                    url &&
+                    `${url}${contract_path?.replace('{address}', address)}`
+                  }
                 />
               )}
               {ibc_denom && (
                 <ValueBox
                   title="IBC Denom"
                   value={ibc_denom}
-                  url={url && asset_path && `${url}${asset_path.replace('{ibc_denom}', getIBCDenomBase64(ibc_denom))}`}
+                  url={
+                    url &&
+                    asset_path &&
+                    `${url}${asset_path.replace('{ibc_denom}', getIBCDenomBase64(ibc_denom))}`
+                  }
                   prefix="ibc/"
                 />
               )}
@@ -254,7 +345,14 @@ function Asset({ data, focusID, onFocus }) {
                 <ValueBox
                   title="Symbol"
                   value={tokenSymbol}
-                  url={url && (address ? `${url}${contract_path?.replace('{address}', address)}` : asset_path && ibc_denom ? `${url}${asset_path.replace('{ibc_denom}', getIBCDenomBase64(ibc_denom))}` : null)}
+                  url={
+                    url &&
+                    (address
+                      ? `${url}${contract_path?.replace('{address}', address)}`
+                      : asset_path && ibc_denom
+                        ? `${url}${asset_path.replace('{ibc_denom}', getIBCDenomBase64(ibc_denom))}`
+                        : null)
+                  }
                 />
               )}
             </div>
@@ -265,7 +363,7 @@ function Asset({ data, focusID, onFocus }) {
   )
 }
 
-const getParams = searchParams => {
+const getParams = (searchParams) => {
   const params = {}
   for (const [k, v] of searchParams.entries()) {
     switch (k) {
@@ -277,9 +375,13 @@ const getParams = searchParams => {
   return params
 }
 
-const getQueryString = params => {
+const getQueryString = (params) => {
   const qs = new URLSearchParams()
-  Object.entries({ ...params }).filter(([k, v]) => v).forEach(([k, v]) => { qs.append(k, v) })
+  Object.entries({ ...params })
+    .filter(([k, v]) => v)
+    .forEach(([k, v]) => {
+      qs.append(k, v)
+    })
   return qs.toString()
 }
 
@@ -312,7 +414,15 @@ export function Resources({ resource }) {
         }
         break
     }
-  }, [router, pathname, rendered, setRendered, resource, setInput, setAssetFocusID])
+  }, [
+    router,
+    pathname,
+    rendered,
+    setRendered,
+    resource,
+    setInput,
+    setAssetFocusID,
+  ])
 
   useEffect(() => {
     const _params = getParams(searchParams)
@@ -325,29 +435,105 @@ export function Resources({ resource }) {
 
     switch (resource) {
       case 'chains':
-        return toArray(chains).filter(d => !type || d.chain_type === type).filter(d => !d.no_inflation || d.deprecated).filter(d => !input || includesStringList(_.uniq(toArray(['id', 'chain_id', 'chain_name', 'name'].map(f => d[f]?.toString()), { toCase: 'lower' })), words))
+        return toArray(chains)
+          .filter((d) => !type || d.chain_type === type)
+          .filter((d) => !d.no_inflation || d.deprecated)
+          .filter(
+            (d) =>
+              !input ||
+              includesStringList(
+                _.uniq(
+                  toArray(
+                    ['id', 'chain_id', 'chain_name', 'name'].map((f) =>
+                      d[f]?.toString(),
+                    ),
+                    { toCase: 'lower' },
+                  ),
+                ),
+                words,
+              ),
+          )
       case 'assets':
         return _.concat(
-          toArray(!type || type === 'gateway' ? assets : []).filter(d => !input || includesStringList(_.uniq(toArray(_.concat(['denom', 'name', 'symbol'].map(f => d[f]), d.denoms, Object.values({ ...d.addresses }).flatMap(a => toArray([!equalsIgnoreCase(input, 'axl') && a.symbol, a.address, a.ibc_denom]))), { toCase: 'lower' })), words)),
-          toArray(!type || type === 'its' ? itsAssets : []).filter(d => !input || includesStringList(_.uniq(toArray(_.concat(['name', 'symbol'].map(f => d[f]), Object.values({ ...d.chains }).flatMap(a => toArray([!equalsIgnoreCase(input, 'axl') && a.symbol, a.tokenAddress]))), { toCase: 'lower' })), words)).map(d => ({ ...d, type: 'its' })),
+          toArray(!type || type === 'gateway' ? assets : []).filter(
+            (d) =>
+              !input ||
+              includesStringList(
+                _.uniq(
+                  toArray(
+                    _.concat(
+                      ['denom', 'name', 'symbol'].map((f) => d[f]),
+                      d.denoms,
+                      Object.values({ ...d.addresses }).flatMap((a) =>
+                        toArray([
+                          !equalsIgnoreCase(input, 'axl') && a.symbol,
+                          a.address,
+                          a.ibc_denom,
+                        ]),
+                      ),
+                    ),
+                    { toCase: 'lower' },
+                  ),
+                ),
+                words,
+              ),
+          ),
+          toArray(!type || type === 'its' ? itsAssets : [])
+            .filter(
+              (d) =>
+                !input ||
+                includesStringList(
+                  _.uniq(
+                    toArray(
+                      _.concat(
+                        ['name', 'symbol'].map((f) => d[f]),
+                        Object.values({ ...d.chains }).flatMap((a) =>
+                          toArray([
+                            !equalsIgnoreCase(input, 'axl') && a.symbol,
+                            a.tokenAddress,
+                          ]),
+                        ),
+                      ),
+                      { toCase: 'lower' },
+                    ),
+                  ),
+                  words,
+                ),
+            )
+            .map((d) => ({ ...d, type: 'its' })),
         )
       default:
         return null
     }
   }
 
-  const render = resource => {
+  const render = (resource) => {
     switch (resource) {
       case 'chains':
         return (
-          <ul role="list" className="w-full mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {filter(resource, params).map((d, i) => <Chain key={i} data={d} />)}
+          <ul
+            role="list"
+            className="mx-auto grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8"
+          >
+            {filter(resource, params).map((d, i) => (
+              <Chain key={i} data={d} />
+            ))}
           </ul>
         )
       case 'assets':
         return (
-          <ul role="list" className="w-full mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
-            {filter(resource, params).map((d, i) => <Asset key={i} data={d} focusID={assetFocusID} onFocus={id => setAssetFocusID(id)} />)}
+          <ul
+            role="list"
+            className="mx-auto grid w-full grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 lg:gap-8"
+          >
+            {filter(resource, params).map((d, i) => (
+              <Asset
+                key={i}
+                data={d}
+                focusID={assetFocusID}
+                onFocus={(id) => setAssetFocusID(id)}
+              />
+            ))}
           </ul>
         )
       default:
@@ -355,50 +541,63 @@ export function Resources({ resource }) {
     }
   }
 
-  return resource && (
-    <Container className="flex flex-col gap-y-8 sm:gap-y-12 sm:mt-8">
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between sm:gap-x-2 gap-y-4 sm:gap-y-0">
-        <nav className="flex gap-x-4">
-          {resources.map((d, i) => (
-            <Link
-              key={i}
-              href={`/resources/${d}`}
-              className={clsx(
-                'rounded-md px-3 py-2 capitalize text-base font-medium',
-                d === resource ? 'bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300' : 'text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-400',
-              )}
-            >
-              {d}
-            </Link>
-          ))}
-        </nav>
-        <div className="max-w-sm flex flex-col items-start sm:items-end gap-y-2">
-          <input
-            placeholder={`Search by ${resource === 'assets' ? 'Denom / Symbol / Address' : 'Chain Name / ID'}`}
-            value={input}
-            onChange={e => setInput(split(e.target.value, { delimiter: ' ', filterBlank: false }).join(' '))}
-            className="w-full sm:w-80 h-10 bg-white dark:bg-zinc-900 appearance-none border-zinc-200 hover:border-blue-300 focus:border-blue-600 dark:border-zinc-700 dark:hover:border-blue-800 dark:focus:border-blue-500 focus:ring-0 rounded-lg text-sm text-zinc-600 dark:text-zinc-400 px-3"
-          />
-          <div className="max-w-xl flex flex-wrap items-center mt-2">
-            {(resource === 'assets' ? assetTypes : chainTypes).map((d, i) => {
-              const selected = d.value === params.type
-              return (
-                <Link
-                  key={i}
-                  href={`${pathname}?${getQueryString({ ...params, type: d.value })}`}
-                  className={clsx(
-                    'min-w-max flex items-center text-xs sm:text-sm whitespace-nowrap mr-4 mb-1 sm:mb-0',
-                    selected ? 'text-blue-600 dark:text-blue-500 font-semibold' : 'text-zinc-400 hover:text-zinc-700 dark:text-zinc-500 dark:hover:text-zinc-300',
-                  )}
-                >
-                  <span>{d.label}</span>
-                </Link>
-              )
-            })}
+  return (
+    resource && (
+      <Container className="flex flex-col gap-y-8 sm:mt-8 sm:gap-y-12">
+        <div className="flex flex-col gap-y-4 sm:flex-row sm:items-center sm:justify-between sm:gap-x-2 sm:gap-y-0">
+          <nav className="flex gap-x-4">
+            {resources.map((d, i) => (
+              <Link
+                key={i}
+                href={`/resources/${d}`}
+                className={clsx(
+                  'rounded-md px-3 py-2 text-base font-medium capitalize',
+                  d === resource
+                    ? 'bg-zinc-100 text-zinc-700 dark:bg-zinc-800 dark:text-zinc-300'
+                    : 'text-zinc-500 hover:text-zinc-600 dark:hover:text-zinc-400',
+                )}
+              >
+                {d}
+              </Link>
+            ))}
+          </nav>
+          <div className="flex max-w-sm flex-col items-start gap-y-2 sm:items-end">
+            <input
+              placeholder={`Search by ${resource === 'assets' ? 'Denom / Symbol / Address' : 'Chain Name / ID'}`}
+              value={input}
+              onChange={(e) =>
+                setInput(
+                  split(e.target.value, {
+                    delimiter: ' ',
+                    filterBlank: false,
+                  }).join(' '),
+                )
+              }
+              className="h-10 w-full appearance-none rounded-lg border-zinc-200 bg-white px-3 text-sm text-zinc-600 hover:border-blue-300 focus:border-blue-600 focus:ring-0 dark:border-zinc-700 dark:bg-zinc-900 dark:text-zinc-400 dark:hover:border-blue-800 dark:focus:border-blue-500 sm:w-80"
+            />
+            <div className="mt-2 flex max-w-xl flex-wrap items-center">
+              {(resource === 'assets' ? assetTypes : chainTypes).map((d, i) => {
+                const selected = d.value === params.type
+                return (
+                  <Link
+                    key={i}
+                    href={`${pathname}?${getQueryString({ ...params, type: d.value })}`}
+                    className={clsx(
+                      'mb-1 mr-4 flex min-w-max items-center whitespace-nowrap text-xs sm:mb-0 sm:text-sm',
+                      selected
+                        ? 'font-semibold text-blue-600 dark:text-blue-500'
+                        : 'text-zinc-400 hover:text-zinc-700 dark:text-zinc-500 dark:hover:text-zinc-300',
+                    )}
+                  >
+                    <span>{d.label}</span>
+                  </Link>
+                )
+              })}
+            </div>
           </div>
         </div>
-      </div>
-      {render(resource)}
-    </Container>
+        {render(resource)}
+      </Container>
+    )
   )
 }
