@@ -53,6 +53,7 @@ import {
   scalarDivideBodyRow,
   scalarDivideRow,
 } from '@/styles/scalar'
+import { CHAINS } from '@/lib/provider/wagmi'
 
 const size = 25
 
@@ -476,6 +477,8 @@ function Filters() {
     </>
   )
 }
+
+console.log({ CHAINS })
 
 export const getEvent = (data) => {
   const {
