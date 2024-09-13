@@ -53,7 +53,6 @@ import {
   scalarDivideBodyRow,
   scalarDivideRow,
 } from '@/styles/scalar'
-import { CHAINS } from '@/lib/provider/wagmi'
 
 const size = 25
 
@@ -478,8 +477,6 @@ function Filters() {
   )
 }
 
-console.log({ CHAINS })
-
 export const getEvent = (data) => {
   const {
     call,
@@ -577,6 +574,9 @@ export function GMPs({ address }) {
                 new Promise(async (resolve) => resolve(await customData(d))),
             ),
           )
+
+        console.log({ response })
+
         setSearchResults({
           ...(refresh ? undefined : searchResults),
           [generateKeyFromParams(params)]: { ...response },
@@ -710,6 +710,9 @@ export function GMPs({ address }) {
                     d.executed?.transactionHash ||
                     d.executed?.receipt?.transactionHash ||
                     d.executed?.receipt?.hash
+
+                    console.log({ status: d.simplified_status, event: getEvent(d) })
+                    console.log({ d })
 
                   return (
                     <tr

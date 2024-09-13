@@ -1,55 +1,47 @@
 import { QueryClient } from '@tanstack/react-query'
-import { defaultWagmiConfig } from '@web3modal/wagmi/react/config'
 import { createWeb3Modal } from '@web3modal/wagmi/react'
+import { defaultWagmiConfig } from '@web3modal/wagmi/react/config'
 import {
-  mainnet,
-  goerli,
-  sepolia,
+  arbitrum,
+  arbitrumSepolia,
+  aurora,
+  auroraTestnet,
+  avalanche,
+  avalancheFuji,
+  base,
+  baseSepolia,
+  blast,
+  blastSepolia,
   bsc,
   bscTestnet,
+  celo,
+  celoAlfajores,
+  fantom,
+  fantomTestnet,
+  filecoin,
+  filecoinCalibration,
+  fraxtal,
+  fraxtalTestnet,
+  immutableZkEvm,
+  immutableZkEvmTestnet,
+  kava,
+  kavaTestnet,
+  linea,
+  lineaSepolia,
+  mainnet,
+  mantle,
+  mantleSepoliaTestnet,
+  moonbaseAlpha,
+  moonbeam,
+  optimism,
+  optimismSepolia,
   polygon,
-  polygonMumbai,
   polygonAmoy,
   polygonZkEvm,
   polygonZkEvmTestnet,
-  avalanche,
-  avalancheFuji,
-  fantom,
-  fantomTestnet,
-  moonbeam,
-  moonbaseAlpha,
-  aurora,
-  auroraTestnet,
-  arbitrum,
-  arbitrumGoerli,
-  arbitrumSepolia,
-  optimism,
-  optimismGoerli,
-  optimismSepolia,
-  base,
-  baseGoerli,
-  baseSepolia,
-  mantle,
-  mantleTestnet,
-  mantleSepoliaTestnet,
-  celo,
-  celoAlfajores,
-  kava,
-  kavaTestnet,
-  filecoin,
-  filecoinHyperspace,
-  filecoinCalibration,
-  linea,
-  lineaTestnet,
-  lineaSepolia,
   scroll,
   scrollSepolia,
-  immutableZkEvm,
-  immutableZkEvmTestnet,
-  fraxtal,
-  fraxtalTestnet,
-  blast,
-  blastSepolia,
+  sepolia
 } from 'wagmi/chains'
 
 import { toArray } from '@/lib/parser'
@@ -70,6 +62,15 @@ const parseCustomEvmChains = () => {
   const chainString = customEvmChainsEnv.slice(1, -1)
   const chainArray = chainString.split('<>')
 
+  // remove undefined
+
+  
+  chainArray.forEach((chain, index) => {
+    if (!chain) {
+      chainArray.splice(index, 1)
+    }
+  })
+  
   return chainArray.map((chain) => {
     const pairs = chain.split(',')
     const tmp = pairs.reduce((acc, pair) => {
