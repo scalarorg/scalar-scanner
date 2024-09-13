@@ -10,7 +10,7 @@ function apply_path {
     # Replace placeholders in /app/dist directory
     for var in $env_vars; do
         echo "Replacing ${var} with ${!var}"
-        find /app/.next \( -type d -name .git -prune \) -o -type f -print0 | xargs -0 sed -i "s#NEXT_PUBLIC_${var}#${!var}#g"
+        find /app/dist \( -type d -name .git -prune \) -o -type f -print0 | xargs -0 sed -i "s#APP_${var}#${!var}#g"
     done
 }
 
