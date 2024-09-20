@@ -54,6 +54,36 @@ import {
   scalarDivideRow,
 } from '@/styles/scalar'
 
+const getMessageId = (call) => {
+  if (call.returnValues?.messageId) {
+    return call.returnValues.messageId
+  }
+
+  const isCosmos = call.chain_type === 'cosmos'
+
+  const isEvm = call.chain_type === 'evm'
+
+  const hasReceipt = call.receipt
+
+  const messageIdIndex = isNumber(call.messageIdIndex)
+
+  const logIndex = isNumber(call._logIndex)
+    ? `-${call._logIndex}`
+    : isNumber(call.logIndex)
+      ? `:${call.logIndex}`
+      : ''
+
+  if (isCosmos && messageIdIndex) {
+    return `${call.axelarTransactionHash}-${call.messageIdIndex}`
+  }
+
+  if ((isEvm || !call.chain_type) && hasReceipt) {
+    return `${call.transactionHash}${logIndex}`
+  }
+
+  return call.transactionHash
+}
+
 const size = 25
 
 function Filters() {
@@ -575,7 +605,7 @@ export function GMPs({ address }) {
             ),
           )
 
-        console.log({ response })
+        console.log(response.data)
 
         setSearchResults({
           ...(refresh ? undefined : searchResults),
@@ -711,9 +741,6 @@ export function GMPs({ address }) {
                     d.executed?.receipt?.transactionHash ||
                     d.executed?.receipt?.hash
 
-                    console.log({ status: d.simplified_status, event: getEvent(d) })
-                    console.log({ d })
-
                   return (
                     <tr
                       key={d.call.id}
@@ -730,7 +757,7 @@ export function GMPs({ address }) {
                             }
                           >
                             <Link
-                              href={`/gmp/${d.call.returnValues?.messageId ? d.call.returnValues.messageId : `${d.call.chain_type === 'cosmos' && isNumber(d.call.messageIdIndex) ? d.call.axelarTransactionHash : d.call.transactionHash}${d.call.chain_type === 'evm' && d.call.receipt ? (isNumber(d.call._logIndex) ? `-${d.call._logIndex}` : isNumber(d.call.logIndex) ? `:${d.call.logIndex}` : '') : d.call.chain_type === 'cosmos' && isNumber(d.call.messageIdIndex) ? `-${d.call.messageIdIndex}` : ''}`}`}
+                              href={`/gmp/${getMessageId(d.call)}`}
                               target="_blank"
                               className={scalarBlueText}
                             >
@@ -874,16 +901,16 @@ export function GMPs({ address }) {
                               <Tag
                                 className={clsx(
                                   'w-fit rounded-full px-4 py-1.5 capitalize',
-                                  ['received'].includes(d.simplified_status)
+                                  ['Success'].includes(d.simplified_status)
                                     ? 'bg-green-600 dark:bg-green-500'
-                                    : ['approved'].includes(d.simplified_status)
+                                    : ['Approved'].includes(d.simplified_status)
                                       ? 'bg-orange-500 dark:bg-orange-600'
-                                      : ['failed'].includes(d.simplified_status)
+                                      : ['Failed'].includes(d.simplified_status)
                                         ? 'bg-red-600 dark:bg-red-500'
                                         : 'bg-yellow-400 dark:bg-yellow-500',
                                 )}
                               >
-                                {d.simplified_status === 'received' &&
+                                {d.simplified_status === 'Received' &&
                                 getEvent(d) === 'ContractCall'
                                   ? 'Executed'
                                   : d.simplified_status}
