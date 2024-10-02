@@ -61,27 +61,28 @@ const getMessageId = (call) => {
 
   const isCosmos = call.chain_type === 'cosmos'
 
-  const isEvm = call.chain_type === 'evm'
+  // const isEvm = call.chain_type === 'evm'
 
-  const hasReceipt = call.receipt
+  // const hasReceipt = call.receipt
 
   const messageIdIndex = isNumber(call.messageIdIndex)
 
-  const logIndex = isNumber(call._logIndex)
-    ? `-${call._logIndex}`
-    : isNumber(call.logIndex)
-      ? `:${call.logIndex}`
-      : ''
+  // const logIndex = isNumber(call._logIndex)
+  //   ? `-${call._logIndex}`
+  //   : isNumber(call.logIndex)
+  //     ? `:${call.logIndex}`
+  //     : ''
 
   if (isCosmos && messageIdIndex) {
     return `${call.axelarTransactionHash}-${call.messageIdIndex}`
   }
 
-  if ((isEvm || !call.chain_type) && hasReceipt) {
-    return `${call.transactionHash}${logIndex}`
-  }
+  // if ((isEvm || !call.chain_type) && hasReceipt) {
+  //   return `${call.transactionHash}${logIndex}`
+  // }
 
-  return call.transactionHash
+  // return call.transactionHash
+  return call.messageId || call.transactionHash + '-' + call.logIndex
 }
 
 const size = 25
