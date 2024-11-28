@@ -624,6 +624,7 @@ export function GMPs({ address }) {
   }, [])
 
   const { data, total } = { ...searchResults?.[generateKeyFromParams(params)] }
+  console.log('--- total', total)
   return (
     <Container className="sm:mt-8">
       {!data ? (
