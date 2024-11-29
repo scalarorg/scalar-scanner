@@ -2,4 +2,4 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://axelarscan.io/sitemap.xml
+Sitemap: https://xchains-scanner.testnet.scalar.org/sitemap.xml

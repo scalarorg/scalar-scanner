@@ -41,7 +41,7 @@ import {
   polygonZkEvmTestnet,
   scroll,
   scrollSepolia,
-  sepolia
+  sepolia,
 } from 'wagmi/chains'
 
 import { toArray } from '@/lib/parser'
@@ -64,13 +64,12 @@ const parseCustomEvmChains = () => {
 
   // remove undefined
 
-  
   chainArray.forEach((chain, index) => {
     if (!chain) {
       chainArray.splice(index, 1)
     }
   })
-  
+
   return chainArray.map((chain) => {
     const pairs = chain.split(',')
     const tmp = pairs.reduce((acc, pair) => {
@@ -212,7 +211,7 @@ export const wagmiConfig = defaultWagmiConfig({
   chains: CHAINS,
   projectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID,
   metadata: {
-    name: 'Axelarscan',
+    name: 'Scalarscan',
     description: process.env.NEXT_PUBLIC_DEFAULT_TITLE,
     icons: ['/icons/favicon-32x32.png'],
   },

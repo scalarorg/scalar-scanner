@@ -6,9 +6,6 @@
   environment, // undefined for any
   customize, // async (eventData, environment = 'mainnet' || 'testnet') => { return customValues }
 }
-************************************************************************************************
-* eventData is `call.returnValues` object return from https://docs.axelarscan.io/gmp#searchGMP *
-************************************************************************************************
 */
 
 const customs = [

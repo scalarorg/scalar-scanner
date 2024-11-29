@@ -11,7 +11,7 @@ export function Footer() {
         <div className="flex flex-col items-center border-t border-zinc-400/10 py-6 sm:flex-row-reverse sm:justify-between">
           <div className="flex gap-x-6">
             {/* <Link
-              href="https://www.axelar.network/privacy-policy"
+              href="https://www.scalar.org/privacy-policy"
               target="_blank"
               className="group"
               aria-label="Privacy Policy"
@@ -21,7 +21,7 @@ export function Footer() {
               </span>
             </Link>
             <Link
-              href="https://www.axelar.network/terms-of-use"
+              href="https://www.scalar.org/terms-of-use"
               target="_blank"
               className="group"
               aria-label="Terms of Use"
@@ -34,7 +34,7 @@ export function Footer() {
               href="https://x.com/scalarprotocol"
               target="_blank"
               className="group"
-              aria-label="Axelar Network on Twitter"
+              aria-label="Scalar Network on Twitter"
             >
               <svg
                 aria-hidden="true"
