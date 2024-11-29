@@ -9,6 +9,8 @@ import '@/styles/tailwind.css'
 import '@/styles/global.css'
 import { Suspense } from 'react'
 
+import { isValidURL } from '@/lib/url'
+
 export const metadata = {
   title: {
     template: '%s - Scalarscan',
@@ -16,7 +18,9 @@ export const metadata = {
   },
   description: process.env.NEXT_PUBLIC_DEFAULT_DESCRIPTION,
   openGraph: {
-    images: `${process.env.NEXT_PUBLIC_APP_URL}/images/ogimage.png`,
+    images: isValidURL(process.env.NEXT_PUBLIC_APP_URL)
+      ? new URL('/images/ogimage.png', process.env.NEXT_PUBLIC_APP_URL)
+      : new URL('/images/ogimage.png', 'http://localhost:3000'),
   },
 }
 
