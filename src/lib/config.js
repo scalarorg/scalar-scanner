@@ -5,7 +5,16 @@ import { equalsIgnoreCase, removeDoubleQuote } from '@/lib/string'
 
 export const ENVIRONMENT = process.env.NEXT_PUBLIC_ENVIRONMENT
 
-export const axelarContracts = ['axelar1dv4u5k73pzqrxlzujxg3qp8kvc3pje7jtdvu72npnt5zhq05ejcsn5qme5', 'axelar1dv4u5k73pzqrxlzujxg3qp8kvc3pje7jtdvu72npnt5zhq05ejcsn5qme5s']
+export const network_href = [
+  { name: 'mainnet', href: 'https://xchains-scanner.mainnet.scalar.org/' },
+  { name: 'testnet', href: 'https://xchains-scanner.testnet.scalar.org/' },
+  { name: 'stagenet', href: 'https://xchains-scanner.stagenet.scalar.org/' },
+  { name: 'devnet-amplifier', href: 'https://xchains-scanner.devnet-amplifier.scalar.org/' },
+  { name: 'devnet-verifiers', href: 'https://xchains-scanner.devnet-verifiers.scalar.org/' },
+]
+
+// TODO: use the right scalar contract addresses when implemented
+export const scalarContracts = ['scalar1dv4u5k73pzqrxlzujxg3qp8kvc3pje7jtdvu72npnt5zhq05ejcsn5qme5', 'scalar1dv4u5k73pzqrxlzujxg3qp8kvc3pje7jtdvu72npnt5zhq05ejcsn5qme5s']
 
 export const getChainKey = (chain, chainsData, exact = false) => {
   let key

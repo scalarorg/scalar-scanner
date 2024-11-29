@@ -73,8 +73,9 @@ function Metrics() {
           )}
           <div className="h-6 flex items-center gap-x-1.5">
             <div className="text-zinc-400 dark:text-zinc-300 text-xs">Threshold:</div>
+            {/* TODO: Update href  */}
             <Link
-              href="https://axelar.network/blog/axelar-governance-explained"
+              href="https://scalar.network/blog/scalar-governance-explained"
               target="_blank"
               className="flex items-center text-blue-600 dark:text-blue-500"
             >
@@ -102,8 +103,9 @@ function Metrics() {
           </div>
           <div className="h-6 flex items-center gap-x-1.5">
             <div className="text-zinc-400 dark:text-zinc-300 text-xs">Rewards:</div>
+            {/* TODO: Update href */}
             <Link
-              href="https://axelar.network/blog/axelar-governance-explained"
+              href="https://scalar.network/blog/scalar-governance-explained"
               target="_blank"
               className="flex items-center text-blue-600 dark:text-blue-500"
             >
@@ -134,8 +136,9 @@ function Metrics() {
               <MdLocalGasStation size={16} />
               <span>Unit:</span>
             </div>
+            {/* TODO: Update href */}
             <Link
-              href="https://axelar.network/blog/axelar-governance-explained"
+              href="https://scalar.network/blog/scalar-governance-explained"
               target="_blank"
               className="flex items-center text-blue-600 dark:text-blue-500"
             >
@@ -164,8 +167,9 @@ function Metrics() {
               <MdLocalGasStation size={16} />
               <span className="whitespace-nowrap">Per Transfer:</span>
             </div>
+            {/* TODO: Update href */}
             <Link
-              href="https://axelar.network/blog/axelar-governance-explained"
+              href="https://scalar.network/blog/scalar-governance-explained"
               target="_blank"
               className="flex items-center text-blue-600 dark:text-blue-500"
             >
@@ -220,8 +224,9 @@ function Metrics() {
             {networkParameters?.bankSupply?.amount && networkParameters.stakingPool?.bonded_tokens && (
               <div className="h-6 flex items-center gap-x-1.5">
                 <div className="text-zinc-400 dark:text-zinc-300 text-xs">APR:</div>
+                {/* TODO: Update href */}
                 <Link
-                  href="https://wallet.keplr.app/chains/axelar"
+                  href="https://wallet.keplr.app/chains/scalar"
                   target="_blank"
                   className="flex items-center text-blue-600 dark:text-blue-500"
                 >

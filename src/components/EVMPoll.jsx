@@ -320,14 +320,14 @@ function Votes({ data }) {
                 </td>
                 <td className="px-3 py-4 text-left">
                   {d.validatorData ?
-                    <Profile i={i} address={d.validatorData.operator_address} prefix="axelarvaloper" /> :
+                    <Profile i={i} address={d.validatorData.operator_address} prefix="scalarvaloper" /> :
                     <Copy value={d.voter}>
                       <Link
                         href={`/account/${d.voter}`}
                         target="_blank"
                         className="text-blue-600 dark:text-blue-500 font-medium"
                       >
-                        {ellipse(d.voter, 10, 'axelar')}
+                        {ellipse(d.voter, 10, 'scalar')}
                       </Link>
                     </Copy>
                   }
@@ -433,7 +433,7 @@ export function EVMPoll({ id }) {
 
       if (d) {
         const votes = []
-        Object.entries(d).filter(([k, v]) => k.startsWith('axelar')).forEach(([k, v]) => votes.push(v))
+        Object.entries(d).filter(([k, v]) => k.startsWith('scalar')).forEach(([k, v]) => votes.push(v))
 
         let voteOptions = Object.entries(_.groupBy(toArray(votes).map(v => ({ ...v, option: v.vote ? 'yes' : typeof v.vote === 'boolean' ? 'no' : 'unsubmitted' })), 'option')).map(([k, v]) => {
           return {

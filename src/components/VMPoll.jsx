@@ -328,7 +328,7 @@ export function VMPoll({ id }) {
 
         if (d) {
           const votes = []
-          Object.entries(d).filter(([k, v]) => k.startsWith('axelar')).forEach(([k, v]) => votes.push(v))
+          Object.entries(d).filter(([k, v]) => k.startsWith('scalar')).forEach(([k, v]) => votes.push(v))
 
           let voteOptions = Object.entries(_.groupBy(toArray(votes).map(v => ({ ...v, option: v.vote ? 'yes' : typeof v.vote === 'boolean' ? 'no' : 'unsubmitted' })), 'option')).map(([k, v]) => {
             return {

@@ -131,7 +131,7 @@ function Filters() {
       ),
     },
     { label: 'Voter (Broadcaster Address)', name: 'voter' },
-    params.voter?.startsWith('axelar') && {
+    params.voter?.startsWith('scalar') && {
       label: 'Vote',
       name: 'vote',
       type: 'select',
@@ -447,7 +447,7 @@ export function EVMPolls() {
               toArray(data).map((d) => {
                 const votes = []
                 Object.entries(d)
-                  .filter(([k, v]) => k.startsWith('axelar'))
+                  .filter(([k, v]) => k.startsWith('scalar'))
                   .forEach(([k, v]) => votes.push(v))
 
                 let voteOptions = Object.entries(

@@ -86,7 +86,7 @@ export function getStep(data, chains) {
 
   const sourceChainData = getChainData(sourceChain, chains)
   const destinationChainData = getChainData(destinationChain, chains)
-  const axelarChainData = getChainData('axelarnet', chains)
+  const scalarChainData = getChainData('scalarnet', chains)
 
   const errored =
     error &&
@@ -153,7 +153,7 @@ export function getStep(data, chains) {
             ? 'failed'
             : 'pending',
       data: confirm || confirm_failed_event,
-      chainData: axelarChainData,
+      chainData: scalarChainData,
     },
     destinationChainData?.chain_type === 'evm' && {
       id: 'approve',
@@ -196,7 +196,7 @@ export function getStep(data, chains) {
       data: executed || is_executed || error,
       chainData:
         executed?.axelarTransactionHash && !executed.transactionHash
-          ? axelarChainData
+          ? scalarChainData
           : destinationChainData,
     },
     refunded?.receipt?.status && {
@@ -1789,7 +1789,7 @@ function Details({ data }) {
   const destinationChain =
     approved?.chain || call?.returnValues?.destinationChain
   const destinationChainData = getChainData(destinationChain, chains)
-  const axelarChainData = getChainData('axelarnet', chains)
+  const scalarChainData = getChainData('scalarnet', chains)
 
   const steps = getStep(data, chains)
   return (
@@ -1921,16 +1921,16 @@ function Details({ data }) {
                           stepURL = `${url}${transaction_path.replace('{tx}', transactionHash)}`
                       } else if (
                         axelarTransactionHash &&
-                        axelarChainData?.explorer?.url
+                        scalarChainData?.explorer?.url
                       ) {
                         stepTX = axelarTransactionHash
-                        stepURL = `${axelarChainData.explorer.url}${axelarChainData.explorer.transaction_path.replace('{tx}', axelarTransactionHash)}`
+                        stepURL = `${scalarChainData.explorer.url}${scalarChainData.explorer.transaction_path.replace('{tx}', axelarTransactionHash)}`
                       }
 
                       if (
                         transactionHash &&
                         axelarTransactionHash &&
-                        axelarChainData?.explorer?.url
+                        scalarChainData?.explorer?.url
                       ) {
                         stepMoreInfos.push(
                           <div
@@ -1939,7 +1939,7 @@ function Details({ data }) {
                           >
                             <Copy size={16} value={axelarTransactionHash}>
                               <Link
-                                href={`${axelarChainData.explorer.url}${axelarChainData.explorer.transaction_path.replace('{tx}', axelarTransactionHash)}`}
+                                href={`${scalarChainData.explorer.url}${scalarChainData.explorer.transaction_path.replace('{tx}', axelarTransactionHash)}`}
                                 target="_blank"
                                 className="text-xs text-blue-600 underline dark:text-blue-500"
                               >
@@ -1950,7 +1950,7 @@ function Details({ data }) {
                             </Copy>
                             <ExplorerLink
                               value={axelarTransactionHash}
-                              chain={axelarChainData?.id}
+                              chain={scalarChainData?.id}
                               width={14}
                               height={14}
                             />
@@ -2261,10 +2261,10 @@ function Details({ data }) {
                             <Number value={height} />
                           ))}
                         {axelarBlockNumber &&
-                          (axelarChainData?.explorer?.url &&
-                          axelarChainData.explorer.block_path ? (
+                          (scalarChainData?.explorer?.url &&
+                          scalarChainData.explorer.block_path ? (
                             <Link
-                              href={`${axelarChainData.explorer.url}${axelarChainData.explorer.block_path.replace('{block}', axelarBlockNumber)}`}
+                              href={`${scalarChainData.explorer.url}${scalarChainData.explorer.block_path.replace('{block}', axelarBlockNumber)}`}
                               target="_blank"
                               className="font-medium text-blue-600 dark:text-blue-500"
                             >
@@ -2798,7 +2798,7 @@ export function GMP({ tx, lite }) {
               routeMessageTx?.transactionHash ||
               signCommandTx?.transactionHash ||
               confirmTx?.transactionHash,
-            chain: 'axelarnet',
+            chain: 'scalarnet',
           })
         }
       } catch (error) {

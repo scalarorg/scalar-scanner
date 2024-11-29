@@ -69,7 +69,7 @@ export function Search() {
         if (address) _input = address
         type = 'address'
       }
-      else if (['evmAddress', 'axelarAddress', 'cosmosAddress'].includes(type)) type = type === 'axelarAddress' ? 'account' : 'address'
+      else if (['evmAddress', 'scalarAddress', 'cosmosAddress'].includes(type)) type = type === 'scalarAddress' ? 'account' : 'address'
       else if (['txhash', 'tx'].includes(type)) {
         if ((await searchGMP({ txHash: _input, size: 0 }))?.total) type = 'gmp'
         else if ((await searchTransfers({ txHash: _input, size: 0 }))?.total) type = 'transfer'

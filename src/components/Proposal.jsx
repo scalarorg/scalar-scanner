@@ -17,7 +17,7 @@ import { Tag } from '@/components/Tag'
 import { Number } from '@/components/Number'
 import { Profile } from '@/components/Profile'
 import { useGlobalStore } from '@/components/Global'
-import { getProposal } from '@/lib/api/axelarscan'
+import { getProposal } from '@/lib/api/scalarscan'
 import { getChainData } from '@/lib/config'
 import { toJson, toArray } from '@/lib/parser'
 import { equalsIgnoreCase, ellipse, toTitle } from '@/lib/string'
@@ -261,12 +261,12 @@ function Votes({ data }) {
                     target="_blank"
                     className="text-blue-600 dark:text-blue-500 font-medium"
                   >
-                    {ellipse(d.voter, 10, 'axelar')}
+                    {ellipse(d.voter, 10, 'scalar')}
                   </Link>
                 </Copy>
               </td>
               <td className="px-3 py-4 text-left">
-                {d.validatorData && <Profile i={i} address={d.validatorData.operator_address} prefix="axelarvaloper" />}
+                {d.validatorData && <Profile i={i} address={d.validatorData.operator_address} prefix="scalarvaloper" />}
               </td>
               <td className="px-3 py-4 text-right">
                 {d.voting_power > 0 && (

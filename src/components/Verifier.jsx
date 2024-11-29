@@ -228,7 +228,7 @@ export function Verifier({ address }) {
 
                   const data = verifierAddress && (await searchVMPolls({ voter: verifierAddress, fromBlock, toBlock, size }))?.data
                   setVotes(toArray(data).map(d => Object.fromEntries(
-                    Object.entries(d).filter(([k, v]) => !k.startsWith('axelar') || equalsIgnoreCase(k, verifierAddress)).flatMap(([k, v]) =>
+                    Object.entries(d).filter(([k, v]) => !k.startsWith('scalar') || equalsIgnoreCase(k, verifierAddress)).flatMap(([k, v]) =>
                       equalsIgnoreCase(k, verifierAddress) ? Object.entries({ ...v }).map(([_k, _v]) => [_k === 'id' ? 'txhash' : _k, _v]) : [[k, v]]
                     )
                   )))

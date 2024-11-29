@@ -10,7 +10,7 @@ import { Container } from '@/components/Container'
 import { Spinner } from '@/components/Spinner'
 import { Tag } from '@/components/Tag'
 import { Number } from '@/components/Number'
-import { getProposals } from '@/lib/api/axelarscan'
+import { getProposals } from '@/lib/api/scalarscan'
 import { toArray } from '@/lib/parser'
 import { toTitle } from '@/lib/string'
 import { toNumber } from '@/lib/number'
@@ -36,7 +36,7 @@ export function Proposals() {
             <div className="sm:flex-auto">
               <h1 className="text-zinc-900 dark:text-zinc-100 text-base font-semibold leading-6">Proposals</h1>
               <p className="mt-2 text-zinc-400 dark:text-zinc-500 text-sm">
-                List of proposals in Axelar Network including ID, title, description, type and status.
+                List of proposals in Scalar Network including ID, title, description, type and status.
               </p>
             </div>
           </div>

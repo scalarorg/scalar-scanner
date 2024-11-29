@@ -70,7 +70,7 @@ export function Verifiers() {
                 <h1 className="underline text-zinc-900 dark:text-zinc-100 text-base font-semibold leading-6">Verifiers</h1>
               </div>
               <p className="mt-2 text-zinc-400 dark:text-zinc-500 text-sm">
-                List of active verifiers in Axelar Network with the latest 10K blocks performance.
+                List of active verifiers in Scalar Network with the latest 10K blocks performance.
               </p>
             </div>
           </div>

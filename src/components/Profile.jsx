@@ -542,7 +542,7 @@ export function EVMProfile({ chain, ...props }) {
   return <Profile chain={chain} {...props} />
 }
 
-const AXELAR_LOGO = '/logos/accounts/axelarnet.svg'
+const SCALAR_LOGO = '/logos/accounts/scalarnet.svg'
 const randImage = (i) =>
   `/logos/addresses/${isNumber(i) ? (i % 8) + 1 : _.random(1, 8)}.png`
 
@@ -559,7 +559,7 @@ export function Profile({
   i,
   address,
   chain,
-  prefix = 'axelar',
+  prefix = 'scalar',
   width = 24,
   height = 24,
   noCopy = false,
@@ -570,11 +570,11 @@ export function Profile({
   const { validatorImages, setValidatorImages } = useValidatorImagesStore()
 
   address = Array.isArray(address) ? toHex(address) : address
-  chain = address?.startsWith('axelar') ? 'axelarnet' : chain?.toLowerCase()
+  chain = address?.startsWith('scalar') ? 'scalarnet' : chain?.toLowerCase()
   prefix = !address
     ? prefix
-    : address.startsWith('axelar') && !prefix?.startsWith('axelar')
-      ? 'axelar1'
+    : address.startsWith('scalar') && !prefix?.startsWith('scalar')
+      ? 'scalar1'
       : address.startsWith('0x')
         ? '0x'
         : _.head(
@@ -592,15 +592,15 @@ export function Profile({
     (a) => ({
       address: a,
       name: 'Interchain Token Service',
-      image: AXELAR_LOGO,
+      image: SCALAR_LOGO,
     }),
   )
   const gateways = Object.values({ ...gateway_contracts })
     .filter((d) => d.address)
-    .map((d) => ({ ...d, name: 'Axelar Gateway', image: AXELAR_LOGO }))
+    .map((d) => ({ ...d, name: 'Scalar Gateway', image: SCALAR_LOGO }))
   const gasServices = Object.values({ ...gas_service_contracts })
     .filter((d) => d.address)
-    .map((d) => ({ ...d, name: 'Axelar Gas Service', image: AXELAR_LOGO }))
+    .map((d) => ({ ...d, name: 'Scalar Gas Service', image: SCALAR_LOGO }))
 
   const { relayers, express_relayers, refunders } = { ...configurations }
   const executorRelayers = _.uniq(
@@ -611,11 +611,11 @@ export function Profile({
         Object.keys({ ...broadcasters[ENVIRONMENT] }),
       ),
     ),
-  ).map((a) => ({ address: a, name: 'Axelar Relayer', image: AXELAR_LOGO }))
+  ).map((a) => ({ address: a, name: 'Scalar Relayer', image: SCALAR_LOGO }))
   const expressRelayers = _.uniq(toArray(express_relayers)).map((a) => ({
     address: a,
-    name: 'Axelar Express Relayer',
-    image: AXELAR_LOGO,
+    name: 'Scalar Express Relayer',
+    image: SCALAR_LOGO,
   }))
 
   // custom
@@ -638,7 +638,7 @@ export function Profile({
 
   // validator
   let isValidator
-  if (address?.startsWith('axelar') && !name && validators) {
+  if (address?.startsWith('scalar') && !name && validators) {
     const { broadcaster_address, operator_address, description } = {
       ...validators.find((d) =>
         includesStringList(
@@ -671,7 +671,7 @@ export function Profile({
 
   useEffect(() => {
     const getData = async () => {
-      if (address?.startsWith('axelar') && validators) {
+      if (address?.startsWith('scalar') && validators) {
         const { operator_address, description } = {
           ...validators.find((d) =>
             includesStringList(
@@ -703,7 +703,7 @@ export function Profile({
         } else value = null
 
         if (!image) {
-          if (moniker?.startsWith('axelar-core-')) image = AXELAR_LOGO
+          if (moniker?.startsWith('scalar-core-')) image = SCALAR_LOGO
           else if (!identity) image = randImage()
           if (image) value = { image, updatedAt: moment().valueOf() }
         }
@@ -761,7 +761,7 @@ export function Profile({
           <Link
             href={
               url ||
-              `/${address.startsWith('axelar') ? (prefix === 'axelarvaloper' ? 'validator' : 'account') : 'address'}/${address}`
+              `/${address.startsWith('scalar') ? (prefix === 'scalarvaloper' ? 'validator' : 'account') : 'address'}/${address}`
             }
             target="_blank"
             className={clsx(scalarBlueText, 'font-medium')}
@@ -786,7 +786,7 @@ export function Profile({
         <Link
           href={
             url ||
-            `/${address.startsWith('axelar') ? (prefix === 'axelarvaloper' ? 'validator' : 'account') : 'address'}/${address}`
+            `/${address.startsWith('scalar') ? (prefix === 'scalarvaloper' ? 'validator' : 'account') : 'address'}/${address}`
           }
           target="_blank"
           className={clsx(scalarBlueText, 'font-medium')}

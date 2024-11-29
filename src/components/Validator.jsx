@@ -20,7 +20,7 @@ import { Number } from '@/components/Number'
 import { Profile } from '@/components/Profile'
 import { useValidatorStore } from '@/components/Validators'
 import { useGlobalStore } from '@/components/Global'
-import { getBalances } from '@/lib/api/axelarscan'
+import { getBalances } from '@/lib/api/scalarscan'
 import { getRPCStatus, searchUptimes, searchProposedBlocks, searchHeartbeats, searchPolls, getChainMaintainers, getValidatorDelegations } from '@/lib/api/validator'
 import { ENVIRONMENT, getChainData, getAssetData } from '@/lib/config'
 import { toArray } from '@/lib/parser'
@@ -122,7 +122,7 @@ function Info({ data, address, delegations }) {
             <div className="px-4 sm:px-6 py-6 sm:grid sm:grid-cols-3 sm:gap-4">
               <dt className="text-zinc-900 dark:text-zinc-100 text-sm font-medium">Operator Address</dt>
               <dd className="sm:col-span-2 text-zinc-700 dark:text-zinc-300 text-sm leading-6 mt-1 sm:mt-0">
-                <Copy value={operator_address}><span>{ellipse(operator_address, 10, 'axelarvaloper')}</span></Copy>
+                <Copy value={operator_address}><span>{ellipse(operator_address, 10, 'scalarvaloper')}</span></Copy>
               </dd>
             </div>
           )}
@@ -130,7 +130,7 @@ function Info({ data, address, delegations }) {
             <div className="px-4 sm:px-6 py-6 sm:grid sm:grid-cols-3 sm:gap-4">
               <dt className="text-zinc-900 dark:text-zinc-100 text-sm font-medium">Consensus Address</dt>
               <dd className="sm:col-span-2 text-zinc-700 dark:text-zinc-300 text-sm leading-6 mt-1 sm:mt-0">
-                <Copy value={consensus_address}><span>{ellipse(consensus_address, 10, 'axelarvalcons')}</span></Copy>
+                <Copy value={consensus_address}><span>{ellipse(consensus_address, 10, 'scalarvalcons')}</span></Copy>
               </dd>
             </div>
           )}
@@ -144,7 +144,7 @@ function Info({ data, address, delegations }) {
                     target="_blank"
                     className="text-blue-600 dark:text-blue-500"
                   >
-                    {ellipse(delegator_address, 14, 'axelar')}
+                    {ellipse(delegator_address, 14, 'scalar')}
                   </Link>
                 </Copy>
               </dd>
@@ -161,7 +161,7 @@ function Info({ data, address, delegations }) {
                       target="_blank"
                       className="text-blue-600 dark:text-blue-500"
                     >
-                      {ellipse(broadcaster_address, 14, 'axelar')}
+                      {ellipse(broadcaster_address, 14, 'scalar')}
                     </Link>
                   </Copy>
                   {isNumber(broadcasterBalance?.amount) && (
@@ -303,7 +303,7 @@ function Info({ data, address, delegations }) {
                                     target="_blank"
                                     className="text-blue-600 dark:text-blue-500 font-medium"
                                   >
-                                    {ellipse(d.delegator_address, 6, 'axelar')}
+                                    {ellipse(d.delegator_address, 6, 'scalar')}
                                   </Link>
                                 </Copy>
                               </td>
@@ -561,11 +561,11 @@ export function Validator({ address }) {
 
   useEffect(() => {
     if (address && validators) {
-      if (['axelarvalcons', 'axelar1'].findIndex(p => address.startsWith(p)) > -1) {
+      if (['scalarvalcons', 'scalar1'].findIndex(p => address.startsWith(p)) > -1) {
         const { operator_address } = { ...validators.find(d => includesStringList([d.consensus_address, d.delegator_address, d.broadcaster_address], address.toLowerCase())) }
         if (operator_address) router.push(`/validator/${operator_address}`)
       }
-      else if (address.startsWith('axelarvaloper') && chains && contracts) setEVMChains(toArray(chains).filter(d => d.chain_type ==='evm' && contracts.gateway_contracts?.[d.id]?.address))
+      else if (address.startsWith('scalarvaloper') && chains && contracts) setEVMChains(toArray(chains).filter(d => d.chain_type ==='evm' && contracts.gateway_contracts?.[d.id]?.address))
     }
   }, [address, router, chains, contracts, validators, setEVMChains])
 
@@ -585,7 +585,7 @@ export function Validator({ address }) {
 
   useEffect(() => {
     const getData = async () => {
-      if (address?.startsWith('axelarvaloper') && EVMChains && validators && Object.keys({ ...maintainers }).length === EVMChains.length) {
+      if (address?.startsWith('scalarvaloper') && EVMChains && validators && Object.keys({ ...maintainers }).length === EVMChains.length) {
         const _data = validators.find(d => equalsIgnoreCase(d.operator_address, address))
         if (_data) {
           if (_data.broadcaster_address) {
@@ -661,7 +661,7 @@ export function Validator({ address }) {
 
                   const data = broadcaster_address && (await searchPolls({ voter: broadcaster_address, fromBlock, toBlock, size }))?.data
                   setVotes(toArray(data).map(d => Object.fromEntries(
-                    Object.entries(d).filter(([k, v]) => !k.startsWith('axelar1') || equalsIgnoreCase(k, broadcaster_address)).flatMap(([k, v]) =>
+                    Object.entries(d).filter(([k, v]) => !k.startsWith('scalar1') || equalsIgnoreCase(k, broadcaster_address)).flatMap(([k, v]) =>
                       equalsIgnoreCase(k, broadcaster_address) ? Object.entries({ ...v }).map(([_k, _v]) => [_k === 'id' ? 'txhash' : _k, _v]) : [[k, v]]
                     )
                   )))

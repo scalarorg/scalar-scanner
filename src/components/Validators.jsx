@@ -136,17 +136,18 @@ export function Validators({ status }) {
                 )}
               </div>
               <p className="mt-2 text-zinc-400 dark:text-zinc-500 text-sm">
-                List of {status || 'active'} validators in Axelar Network with the latest 10K blocks performance.
+                List of {status || 'active'} validators in Scalar Network with the latest 10K blocks performance.
                 {(!status || status === 'active') && (
                   <>
                     &nbsp;
+                    {/* TODO: Update link */}
                     <Link
-                      href="https://www.axelar.network/blog/how-to-stake-the-axl-token-on-the-axelar-network"
+                      href="https://www.scalar.network/blog/how-to-stake-the-scalar-token-on-the-scalar-network"
                       target="_blank"
-                      aria-label="How to stake AXL"
+                      aria-label="How to stake Scalar Tokens"
                       className="text-blue-600 dark:text-blue-500 text-sm font-semibold"
                     >
-                      How to stake AXL
+                      How to stake Scalar Tokens
                     </Link>
                   </>
                 )}
@@ -256,10 +257,10 @@ export function Validators({ status }) {
                       </td>
                       <td className="px-3 py-4 text-left">
                         <div className="flex flex-col gap-y-0.5">
-                          <Profile i={i} address={d.operator_address} prefix="axelarvaloper" />
+                          <Profile i={i} address={d.operator_address} prefix="scalarvaloper" />
                           <Copy value={d.operator_address}>
                             <span className="text-zinc-400 dark:text-zinc-500 font-medium">
-                              {ellipse(d.operator_address, 6, 'axelarvaloper')}
+                              {ellipse(d.operator_address, 6, 'scalarvaloper')}
                             </span>
                           </Copy>
                           {isNumber(rate) && (

@@ -16,7 +16,7 @@ import { ThemeToggle } from '@/components/ThemeToggle'
 import { Tag } from '@/components/Tag'
 import { Number } from '@/components/Number'
 import { useGlobalStore } from '@/components/Global'
-import { ENVIRONMENT, getAssetData, getITSAssetData } from '@/lib/config'
+import { network_href, ENVIRONMENT, getAssetData, getITSAssetData } from '@/lib/config'
 import { toArray } from '@/lib/parser'
 import { isNumber, toNumber } from '@/lib/number'
 
@@ -53,13 +53,7 @@ const navigations = [
   // },
 ]
 
-const environments = [
-  { name: 'mainnet', href: 'https://axelarscan.io' },
-  { name: 'testnet', href: 'https://testnet.axelarscan.io' },
-  { name: 'stagenet', href: 'https://stagenet.axelarscan.io' },
-  { name: 'devnet-amplifier', href: 'https://devnet-amplifier.axelarscan.io' },
-  { name: 'devnet-verifiers', href: 'https://devnet-verifiers.axelarscan.io' },
-].filter(
+const environments = network_href.filter(
   (d) =>
     !['stagenet', 'devnet-amplifier', 'devnet-verifiers'].includes(d.name) ||
     d.name === ENVIRONMENT,

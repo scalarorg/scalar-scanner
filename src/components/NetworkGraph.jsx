@@ -264,17 +264,17 @@ export function NetworkGraph({ data, hideTable = false, setChainFocus }) {
 
   useEffect(() => {
     if (data && chains) {
-      const AXELAR = 'axelarnet'
+      const SCALAR = 'scalarnet'
 
       const _data = _.orderBy(Object.entries(_.groupBy(data.flatMap(d => {
-        if ([d.sourceChain, d.destinationChain].includes(AXELAR)) return d
-        return [[d.sourceChain, AXELAR], [AXELAR, d.destinationChain]].map((ids, i) => ({ ...d, id: ids.join('_'), [i === 0 ? 'destinationChain' : 'sourceChain']: AXELAR }))
+        if ([d.sourceChain, d.destinationChain].includes(SCALAR)) return d
+        return [[d.sourceChain, SCALAR], [SCALAR, d.destinationChain]].map((ids, i) => ({ ...d, id: ids.join('_'), [i === 0 ? 'destinationChain' : 'sourceChain']: SCALAR }))
       }), 'id')).map(([k, v]) => ({ id: k, ..._.head(v), num_txs: _.sumBy(v, 'num_txs'), volume: _.sumBy(v, 'volume') })), ['num_txs'], ['desc'])
 
-      chains.filter(d => (!d.maintainer_id || !d.no_inflation) && d.id !== AXELAR).forEach(d => {
-        [[d.id, AXELAR], [AXELAR, d.id]].map(ids => ids.join('_')).forEach((id, i) => {
+      chains.filter(d => (!d.maintainer_id || !d.no_inflation) && d.id !== SCALAR).forEach(d => {
+        [[d.id, SCALAR], [SCALAR, d.id]].map(ids => ids.join('_')).forEach((id, i) => {
           if (_data.findIndex(d => equalsIgnoreCase(d.id, id)) < 0) {
-            _data.push({ id, sourceChain: i === 0 ? d.id : AXELAR, destinationChain: i === 0 ? AXELAR : d.id, num_txs: 0 })
+            _data.push({ id, sourceChain: i === 0 ? d.id : SCALAR, destinationChain: i === 0 ? SCALAR : d.id, num_txs: 0 })
           }
         })
       })
@@ -298,8 +298,8 @@ export function NetworkGraph({ data, hideTable = false, setChainFocus }) {
         }
       })
 
-      const tiers = TIERS.map(d => ({ ...d, threshold: THRESHOLD(nodes.filter(d => d.id !== AXELAR), d.n_sd) }))
-      nodes = _.orderBy(nodes.map(d => ({ ...d, tier: d.id === AXELAR ? 0 : tiers.find(t => t.threshold <= d.num_txs)?.id })), ['num_txs'], ['desc'])
+      const tiers = TIERS.map(d => ({ ...d, threshold: THRESHOLD(nodes.filter(d => d.id !== SCALAR), d.n_sd) }))
+      nodes = _.orderBy(nodes.map(d => ({ ...d, tier: d.id === SCALAR ? 0 : tiers.find(t => t.threshold <= d.num_txs)?.id })), ['num_txs'], ['desc'])
 
       setGraphData({ nodes, edges })
     }

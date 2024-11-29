@@ -24,7 +24,7 @@ import { getParams, getQueryString, Pagination } from '@/components/Pagination'
 import { useGlobalStore } from '@/components/Global'
 import { searchTransactions, getTransactions } from '@/lib/api/validator'
 import { searchDepositAddresses } from '@/lib/api/token-transfer'
-import { axelarContracts, getAssetData } from '@/lib/config'
+import { scalarContracts, getAssetData } from '@/lib/config'
 import { getIcapAddress, getInputType, toJson, toHex, split, toArray } from '@/lib/parser'
 import { includesStringList } from '@/lib/operator'
 import { getAttributeValue } from '@/lib/cosmos'
@@ -555,7 +555,7 @@ export function Transactions({ height, address }) {
           data = response?.data
           total = response?.total
         }
-        else if ((address?.length >= 65 || addressType === 'evmAddress') && axelarContracts.findIndex(a => equalsIgnoreCase(a, address)) < 0) {
+        else if ((address?.length >= 65 || addressType === 'evmAddress') && scalarContracts.findIndex(a => equalsIgnoreCase(a, address)) < 0) {
           const { deposit_address } = { ..._.head((await searchDepositAddresses({ address }))?.data) }
 
           if (deposit_address || addressType === 'evmAddress') {
@@ -563,7 +563,7 @@ export function Transactions({ height, address }) {
 
             let response
             switch (addressType) {
-              case 'axelarAddress':
+              case 'scalarAddress':
                 // response = await getTransactions({ events: `transfer.sender='${_address}'` })
                 // data = _.concat(toArray(response?.data), toArray(data))
 

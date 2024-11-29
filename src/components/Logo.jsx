@@ -16,7 +16,7 @@ export function Logo(props) {
         unoptimized
         className="min-w-4 mr-3"
       />
-      <span className="hidden md:block uppercase text-sm font-bold">Axelarscan</span>
+      <span className="hidden md:block uppercase text-sm font-bold">Scalarscan</span>
     </div>
   )
 }

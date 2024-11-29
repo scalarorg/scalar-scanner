@@ -30,14 +30,14 @@ import { isNumber, formatUnits } from '@/lib/number'
 const TIME_FORMAT = 'MMM D, YYYY h:mm:ss A z'
 
 export function getStep(data, chains) {
-  const { link, send, wrap, unwrap, erc20_transfer, confirm, vote, command, ibc_send, axelar_transfer, type } = { ...data }
+  const { link, send, wrap, unwrap, erc20_transfer, confirm, vote, command, ibc_send, scalar_transfer, type } = { ...data }
 
   const sourceChain = send?.original_source_chain || link?.original_source_chain || send?.source_chain
   const destinationChain = send?.original_destination_chain || link?.original_destination_chain || unwrap?.destination_chain || send?.destination_chain || link?.destination_chain
 
   const sourceChainData = getChainData(sourceChain, chains)
   const destinationChainData = getChainData(destinationChain, chains)
-  const axelarChainData = getChainData('axelarnet', chains)
+  const scalarChainData = getChainData('scalarnet', chains)
 
   return toArray([
     type === 'deposit_address' && link && {
@@ -45,7 +45,7 @@ export function getStep(data, chains) {
       title: 'Linked',
       status: 'success',
       data: link,
-      chainData: axelarChainData,
+      chainData: scalarChainData,
     },
     {
       id: 'send',
@@ -73,35 +73,35 @@ export function getStep(data, chains) {
       title: confirm ? 'Deposit Confirmed' : sourceChainData?.chain_type === 'evm' ? 'Waiting for Finality' : 'Confirm Deposit',
       status: confirm ? 'success' : 'pending',
       data: confirm,
-      chainData: axelarChainData,
+      chainData: scalarChainData,
     },
     sourceChainData?.chain_type === 'evm' && {
       id: 'vote',
       title: vote ? vote.success ? 'Confirmed' : 'Failed to Confirm' : confirm ? 'Confirming' : 'Confirm',
       status: vote ? vote.success ? 'success' : 'failed' : 'pending',
       data: vote,
-      chainData: axelarChainData,
+      chainData: scalarChainData,
     },
     destinationChainData?.chain_type === 'evm' && {
       id: 'command',
       title: command?.executed || command?.transactionHash ? 'Received' : 'Approve',
       status: command?.executed || command?.transactionHash ? 'success' : 'pending',
       data: command,
-      chainData: command?.transactionHash ? destinationChainData : axelarChainData,
+      chainData: command?.transactionHash ? destinationChainData : scalarChainData,
     },
-    destinationChainData?.chain_type === 'cosmos' && destinationChainData.id !== 'axelarnet' && {
+    destinationChainData?.chain_type === 'cosmos' && destinationChainData.id !== 'scalarnet' && {
       id: 'ibc_send',
       title: ibc_send?.ack_txhash || (ibc_send?.recv_txhash && !ibc_send.failed_txhash) ? 'Received' : ibc_send?.failed_txhash ? 'Error' : 'Execute',
       status: ibc_send?.ack_txhash || (ibc_send?.recv_txhash && !ibc_send.failed_txhash) ? 'success' : ibc_send?.failed_txhash ? 'failed' : 'pending',
       data: ibc_send,
-      chainData: ibc_send?.recv_txhash ? destinationChainData : axelarChainData,
+      chainData: ibc_send?.recv_txhash ? destinationChainData : scalarChainData,
     },
-    destinationChainData?.id === 'axelarnet' && {
-      id: 'axelar_transfer',
-      title: axelar_transfer ? 'Received' : 'Execute',
-      status: axelar_transfer ? 'success' : 'pending',
-      data: axelar_transfer,
-      chainData: axelarChainData,
+    destinationChainData?.id === 'scalarnet' && {
+      id: 'scalar_transfer',
+      title: scalar_transfer ? 'Received' : 'Execute',
+      status: scalar_transfer ? 'success' : 'pending',
+      data: scalar_transfer,
+      chainData: scalarChainData,
     },
     type === 'unwrap' && {
       id: 'unwrap',
@@ -131,8 +131,8 @@ function Info({ data, tx }) {
   const sourceChainData = getChainData(sourceChain, chains)
   const { url, transaction_path } = { ...sourceChainData?.explorer }
   const destinationChainData = getChainData(destinationChain, chains)
-  const depositChainData = getChainData(depositAddress?.startsWith('axelar') ? 'axelarnet' : sourceChain, chains)
-  const axelarChainData = getChainData('axelarnet', chains)
+  const depositChainData = getChainData(depositAddress?.startsWith('scalar') ? 'scalarnet' : sourceChain, chains)
+  const scalarChainData = getChainData('scalarnet', chains)
 
   const assetData = getAssetData(send?.denom, assets)
   const { addresses } = { ...assetData }
@@ -219,7 +219,7 @@ function Info({ data, tx }) {
                           case 'wrap':
                           case 'erc20_transfer':
                           case 'confirm':
-                          case 'axelar_transfer':
+                          case 'scalar_transfer':
                             if (txhash) stepURL = `${url}${transaction_path.replace('{tx}', txhash)}`
                             break
                           case 'vote':
@@ -232,7 +232,7 @@ function Info({ data, tx }) {
                             break
                           case 'ibc_send':
                             if (recv_txhash) stepURL = `${url}${transaction_path.replace('{tx}', recv_txhash)}`
-                            else if (ack_txhash) stepURL = `${axelarChainData.explorer.url}${axelarChainData.explorer.transaction_path.replace('{tx}', ack_txhash)}`
+                            else if (ack_txhash) stepURL = `${scalarChainData.explorer.url}${scalarChainData.explorer.transaction_path.replace('{tx}', ack_txhash)}`
                             else if (failed_txhash) stepURL = `${url}${transaction_path.replace('{tx}', failed_txhash)}`
                             break
                           case 'unwrap':
@@ -411,7 +411,7 @@ function Details({ data }) {
   const { link, send, unwrap } = { ...data }
   const destinationChain = send?.original_destination_chain || link?.original_destination_chain || unwrap?.destination_chain || send?.destination_chain || link?.destination_chain
   const destinationChainData = getChainData(destinationChain, chains)
-  const axelarChainData = getChainData('axelarnet', chains)
+  const scalarChainData = getChainData('scalarnet', chains)
 
   const steps = getStep(data, chains)
 
@@ -452,7 +452,7 @@ function Details({ data }) {
                 case 'wrap':
                 case 'erc20_transfer':
                 case 'confirm':
-                case 'axelar_transfer':
+                case 'scalar_transfer':
                   if (txhash) {
                     stepTX = txhash
                     stepURL = `${url}${transaction_path.replace('{tx}', txhash)}`
@@ -499,13 +499,13 @@ function Details({ data }) {
                   }
                   if (ack_txhash) {
                     stepTX = stepTX || ack_txhash
-                    stepURL = stepURL || `${axelarChainData.explorer.url}${axelarChainData.explorer.transaction_path.replace('{tx}', ack_txhash)}`
+                    stepURL = stepURL || `${scalarChainData.explorer.url}${scalarChainData.explorer.transaction_path.replace('{tx}', ack_txhash)}`
 
                     if (recv_txhash) {
                       stepMoreInfos.push((
                         <Copy key={stepMoreInfos.length} size={16} value={ack_txhash}>
                           <Link
-                            href={`${axelarChainData.explorer.url}${axelarChainData.explorer.transaction_path.replace('{tx}', ack_txhash)}`}
+                            href={`${scalarChainData.explorer.url}${scalarChainData.explorer.transaction_path.replace('{tx}', ack_txhash)}`}
                             target="_blank"
                             className="text-blue-600 dark:text-blue-500 text-xs underline"
                           >
@@ -541,7 +541,7 @@ function Details({ data }) {
                       stepMoreInfos.push((
                         <Copy key={stepMoreInfos.length} size={16} value={txhash}>
                           <Link
-                            href={`${axelarChainData.explorer.url}${axelarChainData.explorer.transaction_path.replace('{tx}', txhash)}`}
+                            href={`${scalarChainData.explorer.url}${scalarChainData.explorer.transaction_path.replace('{tx}', txhash)}`}
                             target="_blank"
                             className="text-blue-600 dark:text-blue-500 text-xs whitespace-nowrap underline"
                           >
@@ -594,7 +594,7 @@ function Details({ data }) {
                 <td className="px-3 py-4 text-left">
                   {(height || blockNumber) && (url && block_path ?
                     <Link
-                      href={`${height && d.id === 'ibc_send' ? axelarChainData.explorer.url : url}${(height && d.id === 'ibc_send' ? axelarChainData.explorer.block_path : block_path).replace('{block}', height || blockNumber)}`}
+                      href={`${height && d.id === 'ibc_send' ? scalarChainData.explorer.url : url}${(height && d.id === 'ibc_send' ? scalarChainData.explorer.block_path : block_path).replace('{block}', height || blockNumber)}`}
                       target="_blank"
                       className="text-blue-600 dark:text-blue-500 font-medium"
                     >

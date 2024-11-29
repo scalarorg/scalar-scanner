@@ -12,4 +12,4 @@ export const transfersTotalActiveUsers = async params => await request('transfer
 export const transfersTopUsers = async params => await request('transfersTopUsers', params)
 export const searchDepositAddresses = async params => await request('searchDepositAddresses', params)
 export const searchBatches = async params => await request('searchBatches', params)
-export const getBatch = async (chain, batchId) => await request('lcd', { path: `/axelar/evm/v1beta1/batched_commands/${chain}/${batchId}` })
+export const getBatch = async (chain, batchId) => await request('lcd', { path: `/scalar/evm/v1beta1/batched_commands/${chain}/${batchId}` })

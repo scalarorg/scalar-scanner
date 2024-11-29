@@ -17,9 +17,9 @@ import { Profile, ChainProfile, AssetProfile } from '@/components/Profile'
 import { TimeAgo } from '@/components/Time'
 import { Transactions } from '@/components/Transactions'
 import { useGlobalStore } from '@/components/Global'
-import { getAccountAmounts } from '@/lib/api/axelarscan'
+import { getAccountAmounts } from '@/lib/api/scalarscan'
 import { searchTransfers, searchDepositAddresses } from '@/lib/api/token-transfer'
-import { axelarContracts, getAssetData } from '@/lib/config'
+import { scalarContracts, getAssetData } from '@/lib/config'
 import { getInputType, toArray } from '@/lib/parser'
 import { includesStringList } from '@/lib/operator'
 import { equalsIgnoreCase, ellipse } from '@/lib/string'
@@ -102,7 +102,7 @@ function Info({ data, address }) {
       </div>
       <div className="border-t border-zinc-200 dark:border-zinc-700">
         <dl className="divide-y divide-zinc-100 dark:divide-zinc-800">
-          {getInputType(address, chains) === 'axelarAddress' && (
+          {getInputType(address, chains) === 'scalarAddress' && (
             <>
               {_.head(rewards?.total) && (
                 <div className="px-4 sm:px-6 py-6 sm:grid sm:grid-cols-3 sm:gap-4">
@@ -480,7 +480,7 @@ export function Account({ address }) {
   useEffect(() => {
     const getData = async () => {
       if (address && chains && assets && validators) {
-        if (['axelarvaloper', 'axelarvalcons'].findIndex(p => address.startsWith(p)) > -1) {
+        if (['scalarvaloper', 'scalarvalcons'].findIndex(p => address.startsWith(p)) > -1) {
           const { operator_address } = { ...validators.find(d => includesStringList(address.toLowerCase(), [d.operator_address, d.consensus_address])) }
           router.push(`/validator/${operator_address}`)
         }
@@ -494,7 +494,7 @@ export function Account({ address }) {
               return { ...d, value: price > 0 ? d.amount * price : 0 }
             }), ['value'], ['desc'])
 
-            if ((address.length >= 65 || isEVMAddress) && axelarContracts.findIndex(a => equalsIgnoreCase(a, address)) < 0) {
+            if ((address.length >= 65 || isEVMAddress) && scalarContracts.findIndex(a => equalsIgnoreCase(a, address)) < 0) {
               const depositAddressData = _.head((await searchDepositAddresses({ address }))?.data)
 
               if (depositAddressData) {
@@ -513,7 +513,7 @@ export function Account({ address }) {
     getData()
   }, [address, router, chains, assets, validators, setData])
 
-  const isDepositAddress = (address && (address.length >= 65 || getInputType(address, chains) === 'evmAddress') && axelarContracts.findIndex(a => equalsIgnoreCase(a, address)) < 0) || data?.depositAddressData
+  const isDepositAddress = (address && (address.length >= 65 || getInputType(address, chains) === 'evmAddress') && scalarContracts.findIndex(a => equalsIgnoreCase(a, address)) < 0) || data?.depositAddressData
 
   return (
     <Container className={clsx('sm:mt-8', data ? 'max-w-full' : '')}>
@@ -522,7 +522,7 @@ export function Account({ address }) {
           {isDepositAddress ?
             <>
               <DepositAddress data={data} address={address} />
-              {address.startsWith('axelar1') && <Balances data={data.balances?.data} />}
+              {address.startsWith('scalar1') && <Balances data={data.balances?.data} />}
             </> :
             <>
               <Info data={data} address={address} />
