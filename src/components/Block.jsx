@@ -227,7 +227,7 @@ export function Block({ height }) {
 
   useEffect(() => {
     const getData = async () => {
-      const d = await getBlock(height)
+      const { data: d } = await getBlock(height)
 
       if (d) {
         const { block } = { ...await getBlock(toNumber(height) + 1) }

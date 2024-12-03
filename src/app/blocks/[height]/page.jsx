@@ -1,5 +1,5 @@
-import { Block } from '@/components/Block'
+import { redirect } from 'next/navigation'
 
 export default function BlockPage({ params }) {
-  return <Block {...params} />
+  redirect(`/block/${params.height}`)
 }

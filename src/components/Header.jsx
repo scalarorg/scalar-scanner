@@ -16,13 +16,25 @@ import { ThemeToggle } from '@/components/ThemeToggle'
 import { Tag } from '@/components/Tag'
 import { Number } from '@/components/Number'
 import { useGlobalStore } from '@/components/Global'
-import { network_href, ENVIRONMENT, getAssetData, getITSAssetData } from '@/lib/config'
+import {
+  network_href,
+  ENVIRONMENT,
+  getAssetData,
+  getITSAssetData,
+} from '@/lib/config'
 import { toArray } from '@/lib/parser'
 import { isNumber, toNumber } from '@/lib/number'
 
 const navigations = [
   { title: 'General Message Passing', href: '/gmp/search' },
   { title: 'Stakes', href: '/stakes/search' },
+  {
+    title: 'Network',
+    children: toArray([
+      { title: 'Blocks', href: '/blocks' },
+      { title: 'Transactions', href: '/transactions' },
+    ]),
+  },
   // {
   //   title: 'Interchain',
   //   children: [
