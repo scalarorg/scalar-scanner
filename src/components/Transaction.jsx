@@ -81,7 +81,7 @@ function Info({ data, tx }) {
           <div className="px-4 sm:px-6 py-6 sm:grid sm:grid-cols-3 sm:gap-4">
             <dt className="text-zinc-900 dark:text-zinc-100 text-sm font-medium">Created</dt>
             <dd className="sm:col-span-2 text-zinc-700 dark:text-zinc-300 text-sm leading-6 mt-1 sm:mt-0">
-              {moment(timestamp).format(TIME_FORMAT)}
+              {moment(timestamp*1000).format(TIME_FORMAT)}
             </dd>
           </div>
           {fee && (
@@ -169,7 +169,8 @@ function Data({ data }) {
     if (!formattable && typeof formattable === 'boolean') setFormatted(false)
   }, [formattable, setFormatted])
 
-  const activities = getActivities(data, assets)
+  // TODO: fix data in api to actually return activities
+  const activities = getActivities(data, assets) ? getActivities(data, assets) : []
 
   return (
     <div className="flex flex-col gap-y-4">
@@ -441,9 +442,7 @@ export function Transaction({ tx }) {
 
   useEffect(() => {
     const getData = async () => {
-      const { tx_response } = { ...await getTransaction(tx) }
-      let d = tx_response
-
+      let { data: d } = { ...await getTransaction(tx) }
       if (d) {
         d = { ...d, type: getType(d), sender: getSender(d, assets) }
         console.log('[data]', d)

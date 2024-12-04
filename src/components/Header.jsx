@@ -27,14 +27,14 @@ import { isNumber, toNumber } from '@/lib/number'
 
 const navigations = [
   { title: 'General Message Passing', href: '/gmp/search' },
-  { title: 'Stakes', href: '/stakes/search' },
   {
-    title: 'Network',
+    title: 'Scalar Network',
     children: toArray([
       { title: 'Blocks', href: '/blocks' },
       { title: 'Transactions', href: '/transactions' },
     ]),
   },
+  { title: 'Stakes', href: '/stakes/search' },
   // {
   //   title: 'Interchain',
   //   children: [
@@ -269,7 +269,7 @@ export function Header() {
                     >
                       <Popover.Button
                         className={clsx(
-                          'whitespace-nowrap rounded-lg text-sm uppercase focus:outline-none',
+                          'whitespace-nowrap rounded-lg text-sm focus:outline-none',
                           href === pathname ||
                             children.find((c) => c.href === pathname)
                             ? 'text-blue-600 dark:text-blue-500'
