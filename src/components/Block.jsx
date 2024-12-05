@@ -27,9 +27,9 @@ const TIME_FORMAT = 'MMM D, YYYY h:mm:ss A z'
 function Info({ data, validatorSets, height }) {
   const [signedCollpased, setsignedCollpased] = useState(true)
 
-  const { hash } = { ...data.block_id }
-  const { proposer_address, time } = { ...data.block?.header }
-  const { txs } = { ...data.block?.data }
+  const { hash } = { ...data }
+  const { proposer_address, time } = { ...data }
+  const { num_txs } = { ...data }
 
   const signedValidatorsData = toArray(validatorSets).filter(d => toArray(data.validators).includes(d.address))
   const unsignedValidatorsData = toArray(validatorSets).filter(d => !toArray(data.validators).includes(d.address))
@@ -80,7 +80,7 @@ function Info({ data, validatorSets, height }) {
           <div className="px-4 sm:px-6 py-6 flex flex-col gap-y-2">
             <dt className="text-zinc-900 dark:text-zinc-100 text-sm font-medium">Block Time</dt>
             <dd className="text-zinc-700 dark:text-zinc-300 text-sm leading-6 mt-1">
-              {moment(time).format(TIME_FORMAT)}
+              {moment(time*1000).format(TIME_FORMAT)}
             </dd>
           </div>
           {isNumber(data.round) && (
@@ -136,7 +136,7 @@ function Info({ data, validatorSets, height }) {
             <dt className="text-zinc-900 dark:text-zinc-100 text-sm font-medium">No. Transactions</dt>
             <dd className="text-zinc-700 dark:text-zinc-300 text-sm leading-6 mt-1">
               <Number
-                value={toArray(txs).length}
+                value={num_txs}
                 format="0,0"
                 className="text-zinc-700 dark:text-zinc-300 font-medium"
               />
@@ -227,7 +227,7 @@ export function Block({ height }) {
 
   useEffect(() => {
     const getData = async () => {
-      const d = await getBlock(height)
+      const { data: d } = await getBlock(height)
 
       if (d) {
         const { block } = { ...await getBlock(toNumber(height) + 1) }

@@ -104,7 +104,7 @@ export function Blocks({ height }) {
                       <Number value={d.num_txs} className="text-zinc-700 dark:text-zinc-300 font-medium" />
                     </td>
                     <td className="pl-3 pr-4 sm:pr-0 py-4 flex items-center justify-end text-right">
-                      <TimeAgo timestamp={d.time} />
+                      <TimeAgo timestamp={d.time * 1000} />
                     </td>
                   </tr>
                 ))}

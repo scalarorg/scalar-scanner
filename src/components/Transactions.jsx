@@ -551,7 +551,7 @@ export function Transactions({ height, address }) {
         let total
 
         if (height) {
-          const response = await getTransactions({ events: `tx.height=${height}` })
+          const response = await getTransactions({ height: toNumber(height) })
           data = response?.data
           total = response?.total
         }
@@ -606,6 +606,7 @@ export function Transactions({ height, address }) {
   }, [height, address, chains, assets, params, setSearchResults, refresh, setRefresh])
 
   const { data, total } = { ...searchResults?.[generateKeyFromParams(params)] }
+
   return (
     <Container className={clsx(height ? 'mx-0 mt-5 pt-0.5' : address ? 'max-w-full' : 'sm:mt-8')}>
       {!data ? <Spinner /> :
