@@ -8,7 +8,6 @@ COPY package.json package-lock* ./
 
 COPY public ./public
 COPY src ./src
-COPY .env .
 COPY .eslintrc.json .
 COPY jsconfig.json .
 COPY next.config.js .
