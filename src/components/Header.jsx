@@ -26,7 +26,14 @@ import { toArray } from '@/lib/parser'
 import { isNumber, toNumber } from '@/lib/number'
 
 const navigations = [
-  { title: 'General Message Passing', href: '/gmp/search' },
+  {
+    title: 'Interchain',
+    children: [
+      //{ title: 'Statistics', href: '/interchain' },
+      { title: 'General Message Passing', href: '/gmp/search' },
+      { title: 'Token Transfers', href: '/transfers/search' },
+    ],
+  },
   {
     title: 'Scalar Network',
     children: toArray([
@@ -35,14 +42,7 @@ const navigations = [
     ]),
   },
   { title: 'Stakes', href: '/stakes/search' },
-  // {
-  //   title: 'Interchain',
-  //   children: [
-  //     { title: 'Statistics', href: '/interchain' },
-  //     { title: 'General Message Passing', href: '/gmp/search' },
-  //     { title: 'Token Transfers', href: '/transfers/search' },
-  //   ],
-  // },
+
   // {
   //   title: 'Network',
   //   children: toArray([
