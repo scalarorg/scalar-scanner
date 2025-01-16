@@ -16,10 +16,11 @@ COPY postcss.config.js .
 COPY prettier.config.js .
 COPY tailwind.config.js .
 COPY docker-entrypoint.sh .
+COPY .env .
 
 # RUN npm run build-$ENV
 RUN npm install
-RUN npm run build 
+RUN npm run build
 
 EXPOSE 3000
 
