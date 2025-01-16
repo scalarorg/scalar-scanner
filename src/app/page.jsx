@@ -6,5 +6,5 @@ export default function Index() {
   // TODO_SCALAR: Uncomment the line below to display the Overview component when api is ready
   // return <GMPs />
   // return <Overview />
-  redirect('/gmp/search')
+  redirect('/transfers/search')
 }

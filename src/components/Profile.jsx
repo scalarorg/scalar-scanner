@@ -811,6 +811,7 @@ export function ChainProfile({
   titleClassName,
 }) {
   const { chains } = useGlobalStore()
+  console.log({ value, chains })
   const { name, image } = { ...getChainData(value, chains) }
 
   return (

@@ -30,7 +30,7 @@ const navigations = [
     title: 'Interchain',
     children: [
       //{ title: 'Statistics', href: '/interchain' },
-      { title: 'General Message Passing', href: '/gmp/search' },
+      // { title: 'General Message Passing', href: '/gmp/search' },
       { title: 'Token Transfers', href: '/transfers/search' },
     ],
   },
